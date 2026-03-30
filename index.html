@@ -13,9 +13,9 @@
     --text: #1e293b;
     --text-secondary: #64748b;
     --text-muted: #94a3b8;
-    --accent: #2563eb;
-    --accent-light: #dbeafe;
-    --accent-dark: #1d4ed8;
+    --accent: #0d9488;
+    --accent-light: #ccfbf1;
+    --accent-dark: #0f766e;
     --highlight: #fef08a;
     --category-bg: #f1f5f9;
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
@@ -23,6 +23,10 @@
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.03);
     --radius: 10px;
     --radius-sm: 6px;
+    --fav-color: #f59e0b;
+    --var-bg: #ede9fe;
+    --var-color: #7c3aed;
+    --var-border: #c4b5fd;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -108,7 +112,7 @@
   }
 
   .sidebar {
-    width: 240px;
+    width: 260px;
     flex-shrink: 0;
     padding: 20px 16px;
     border-right: 1px solid var(--border);
@@ -118,6 +122,8 @@
     position: sticky;
     top: 57px;
   }
+
+  .sidebar-section { margin-bottom: 20px; }
 
   .sidebar-title {
     font-size: 11px;
@@ -158,7 +164,51 @@
     text-align: center;
   }
 
-  .cat-btn.active .cat-count { background: rgba(37,99,235,0.15); color: var(--accent-dark); }
+  .cat-btn.active .cat-count { background: rgba(13,148,136,0.15); color: var(--accent-dark); }
+
+  /* Favorites sidebar item */
+  .sidebar-fav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    overflow: hidden;
+  }
+  .sidebar-fav-item:hover { background: var(--surface-hover); color: var(--text); }
+  .sidebar-fav-item .fav-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .sidebar-fav-item .remove-fav {
+    opacity: 0; cursor: pointer; color: var(--text-muted); font-size: 16px; flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  .sidebar-fav-item:hover .remove-fav { opacity: 1; }
+
+  /* Recently Viewed */
+  .sidebar-recent-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    overflow: hidden;
+  }
+  .sidebar-recent-item:hover { background: var(--surface-hover); color: var(--text); }
+  .sidebar-recent-item .recent-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .sidebar-empty {
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
 
   .main {
     flex: 1;
@@ -180,6 +230,12 @@
     color: var(--text-secondary);
   }
 
+  .results-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .sort-select {
     padding: 5px 10px;
     border: 1px solid var(--border);
@@ -197,6 +253,7 @@
     margin-bottom: 10px;
     transition: all 0.15s;
     overflow: hidden;
+    position: relative;
   }
 
   .macro-card:hover { box-shadow: var(--shadow-md); border-color: #cbd5e1; }
@@ -251,6 +308,21 @@
     font-weight: 500;
   }
 
+  /* Favorite star button */
+  .fav-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .fav-btn:hover { color: var(--fav-color); transform: scale(1.15); }
+  .fav-btn.is-fav { color: var(--fav-color); }
+
   .macro-body {
     display: none;
     padding: 0 18px 16px 50px;
@@ -273,6 +345,17 @@
     word-break: break-word;
     max-height: 400px;
     overflow-y: auto;
+  }
+
+  /* Variable highlighting */
+  .var-highlight {
+    background: var(--var-bg);
+    color: var(--var-color);
+    padding: 1px 4px;
+    border-radius: 3px;
+    border: 1px solid var(--var-border);
+    font-weight: 500;
+    font-size: 13px;
   }
 
   .macro-actions-bar {
@@ -312,6 +395,38 @@
     border-radius: 2px;
   }
 
+  /* Hover preview tooltip */
+  .preview-tooltip {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 14px 16px;
+    max-width: 420px;
+    max-height: 220px;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    word-break: break-word;
+    pointer-events: none;
+  }
+  .preview-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, var(--surface));
+    pointer-events: none;
+  }
+  .preview-tooltip.visible { display: block; }
+
   .empty-state {
     text-align: center;
     padding: 80px 20px;
@@ -338,33 +453,54 @@
 
 <div class="topbar">
   <div class="logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#2563eb"/><path d="M8 14.5C8 11.5 10.5 9 14 9s6 2.5 6 5.5c0 2-1.2 3.5-3 4.3v2.2c0 .6-.4 1-1 1h-4c-.6 0-1-.4-1-1v-2.2C9.2 18 8 16.5 8 14.5z" fill="#fff" opacity="0.9"/><circle cx="11.5" cy="14" r="1.2" fill="#2563eb"/><circle cx="16.5" cy="14" r="1.2" fill="#2563eb"/></svg>
+    <svg width="30" height="30" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="58" fill="#0d9488"/>
+      <path d="M60 18c0 0-20 16-20 38c0 14 8 26 20 32c12-6 20-18 20-32C80 34 60 18 60 18z" fill="#ffffff" opacity="0.92"/>
+      <path d="M60 30c0 0-12 12-12 26c0 10 5 18 12 22c7-4 12-12 12-22C72 42 60 30 60 30z" fill="#0d9488" opacity="0.3"/>
+      <path d="M58 44c-2 6-3 14 0 22c2 4 4 6 6 8" stroke="#0d9488" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <path d="M48 68c4-2 8-2 12 0c4 2 8 2 12 0" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    </svg>
     Fountain Macro Hub
   </div>
   <div class="search-wrap">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" class="search-input" id="searchInput" placeholder="Search macros by name or content..." autofocus>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search macros by name or content... (Ctrl+K)" autofocus>
   </div>
   <div class="stats" id="totalStats"></div>
 </div>
 
+<div class="preview-tooltip" id="previewTooltip"></div>
+
 <div class="layout">
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-title">Categories</div>
-    <button class="cat-btn active" data-cat="all" onclick="filterCategory('all', this)">
-      <span>All Macros</span>
-      <span class="cat-count" id="allCount"></span>
-    </button>
-    <div id="catList"></div>
+    <div class="sidebar-section" id="favSection">
+      <div class="sidebar-title">&#9733; Favorites</div>
+      <div id="favList"><div class="sidebar-empty">Pin macros you use often</div></div>
+    </div>
+    <div class="sidebar-section" id="recentSection">
+      <div class="sidebar-title">&#128337; Recently Viewed</div>
+      <div id="recentList"><div class="sidebar-empty">No recent macros</div></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Categories</div>
+      <button class="cat-btn active" data-cat="all" onclick="filterCategory('all', this)">
+        <span>All Macros</span>
+        <span class="cat-count" id="allCount"></span>
+      </button>
+      <div id="catList"></div>
+    </div>
   </aside>
 
   <main class="main" id="main">
     <div class="results-header">
       <div class="results-count" id="resultsCount"></div>
-      <select class="sort-select" id="sortSelect" onchange="renderResults()">
-        <option value="relevance">Sort: Relevance</option>
-        <option value="name">Sort: Name A-Z</option>
-      </select>
+      <div class="results-actions">
+        <select class="sort-select" id="sortSelect" onchange="renderResults()">
+          <option value="relevance">Sort: Relevance</option>
+          <option value="name">Sort: Name A-Z</option>
+          <option value="favorites">Sort: Favorites First</option>
+        </select>
+      </div>
     </div>
     <div id="results"></div>
   </main>
@@ -381,6 +517,37 @@ let activeCategory = 'all';
 let searchQuery = '';
 let debounceTimer;
 
+/* ── LocalStorage helpers ── */
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem('fv_favs') || '[]'); } catch { return []; }
+}
+function setFavorites(arr) {
+  localStorage.setItem('fv_favs', JSON.stringify(arr));
+}
+function isFavorite(name) {
+  return getFavorites().includes(name);
+}
+function toggleFavorite(name) {
+  let favs = getFavorites();
+  if (favs.includes(name)) { favs = favs.filter(f => f !== name); }
+  else { favs.unshift(name); }
+  setFavorites(favs);
+  renderFavSidebar();
+  renderResults();
+}
+
+function getRecent() {
+  try { return JSON.parse(localStorage.getItem('fv_recent') || '[]'); } catch { return []; }
+}
+function addRecent(name) {
+  let recent = getRecent().filter(r => r !== name);
+  recent.unshift(name);
+  if (recent.length > 8) recent = recent.slice(0, 8);
+  localStorage.setItem('fv_recent', JSON.stringify(recent));
+  renderRecentSidebar();
+}
+
+/* ── Init ── */
 document.getElementById('totalStats').textContent = macros.length + ' macros';
 document.getElementById('allCount').textContent = macros.length;
 
@@ -394,6 +561,7 @@ categories.forEach(cat => {
   catList.appendChild(btn);
 });
 
+/* ── Search ── */
 document.getElementById('searchInput').addEventListener('input', function() {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
@@ -426,13 +594,29 @@ function escHtml(s) {
   return d.innerHTML;
 }
 
+/* ── Variable highlighting ── */
+function highlightVariables(htmlStr) {
+  // Match {{variable}}, {variable}, [placeholder], <placeholder>, CAPS_PLACEHOLDER
+  return htmlStr
+    .replace(/(\{\{[^}]+\}\})/g, '<span class="var-highlight">$1</span>')
+    .replace(/(\{[^}]{1,50}\})/g, function(m) {
+      if (m.includes('var-highlight')) return m;
+      return '<span class="var-highlight">' + m + '</span>';
+    })
+    .replace(/(\[[A-Z][A-Z_ ]{2,40}\])/g, '<span class="var-highlight">$1</span>')
+    .replace(/(\[(?:first|last|patient|provider|client|customer|name|email|phone|date|time|address|city|state|zip|medication|dose|rx|drug|appointment)[^\]]{0,30}\])/gi, '<span class="var-highlight">$1</span>');
+}
+
 function highlightText(text, query) {
-  if (!query) return escHtml(text);
+  if (!query) {
+    let h = escHtml(text);
+    return highlightVariables(h);
+  }
   const escaped = escHtml(text);
   const terms = query.split(/\s+/).filter(t => t.length > 1);
-  if (!terms.length) return escaped;
+  if (!terms.length) return highlightVariables(escaped);
   const regex = new RegExp('(' + terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'gi');
-  return escaped.replace(regex, '<mark>$1</mark>');
+  return highlightVariables(escaped.replace(regex, '<mark>$1</mark>'));
 }
 
 function scoreMatch(macro, query) {
@@ -456,6 +640,35 @@ function scoreMatch(macro, query) {
   return score;
 }
 
+/* ── Hover preview ── */
+let previewTimeout;
+const tooltip = document.getElementById('previewTooltip');
+
+function showPreview(e, content) {
+  clearTimeout(previewTimeout);
+  previewTimeout = setTimeout(() => {
+    const maxLen = 350;
+    let preview = content.length > maxLen ? content.substring(0, maxLen) + '...' : content;
+    tooltip.textContent = preview;
+    const rect = e.target.closest('.macro-card').getBoundingClientRect();
+    let top = rect.top;
+    let left = rect.right + 12;
+    if (left + 420 > window.innerWidth) { left = rect.left - 432; }
+    if (left < 8) { left = 8; top = rect.bottom + 8; }
+    if (top + 220 > window.innerHeight) { top = window.innerHeight - 230; }
+    if (top < 8) top = 8;
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+    tooltip.classList.add('visible');
+  }, 350);
+}
+
+function hidePreview() {
+  clearTimeout(previewTimeout);
+  tooltip.classList.remove('visible');
+}
+
+/* ── Render ── */
 function renderResults() {
   const container = document.getElementById('results');
   const sort = document.getElementById('sortSelect').value;
@@ -471,7 +684,15 @@ function renderResults() {
     );
   });
 
-  if (sort === 'relevance' && searchQuery) {
+  if (sort === 'favorites') {
+    const favs = getFavorites();
+    filtered.sort((a, b) => {
+      const aFav = favs.includes(a.n) ? 0 : 1;
+      const bFav = favs.includes(b.n) ? 0 : 1;
+      if (aFav !== bFav) return aFav - bFav;
+      return a.n.localeCompare(b.n);
+    });
+  } else if (sort === 'relevance' && searchQuery) {
     filtered.sort((a, b) => scoreMatch(b, searchQuery) - scoreMatch(a, searchQuery));
   } else {
     filtered.sort((a, b) => a.n.localeCompare(b.n));
@@ -489,14 +710,20 @@ function renderResults() {
 
   for (const m of show) {
     const hasActions = m.a && m.a.trim();
-    html += '<div class="macro-card" onclick="toggleCard(this)">';
-    html += '<div class="macro-header">';
+    const favClass = isFavorite(m.n) ? ' is-fav' : '';
+    const favIcon = isFavorite(m.n) ? '&#9733;' : '&#9734;';
+    const macroId = 'mc_' + btoa(encodeURIComponent(m.n)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+
+    html += '<div class="macro-card" id="' + macroId + '" data-name="' + escHtml(m.n) + '" onmouseenter="showPreview(event, ' + JSON.stringify(JSON.stringify((m.c || '').substring(0, 500))) + ')" onmouseleave="hidePreview()">';
+    html += '<div class="macro-header" onclick="openCard(this.parentElement, \'' + escHtml(m.n).replace(/'/g, "\\'") + '\')">';
     html += '<div class="macro-expand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
     html += '<div class="macro-info">';
     html += '<div class="macro-name">' + highlightText(m.n, searchQuery) + '</div>';
     html += '<div class="macro-meta">';
     html += '<span class="macro-category-tag">' + escHtml(m.cat) + '</span>';
-    html += '</div></div></div>';
+    html += '</div></div>';
+    html += '<button class="fav-btn' + favClass + '" title="' + (isFavorite(m.n) ? 'Remove from favorites' : 'Add to favorites') + '" onclick="event.stopPropagation(); toggleFavorite(\'' + escHtml(m.n).replace(/'/g, "\\'") + '\')">' + favIcon + '</button>';
+    html += '</div>';
     html += '<div class="macro-body">';
     html += '<div class="macro-content">' + highlightText(m.c || '(No content)', searchQuery) + '</div>';
     html += '<div class="macro-actions-bar">';
@@ -512,7 +739,13 @@ function renderResults() {
   container.innerHTML = html;
 }
 
-function toggleCard(card) { card.classList.toggle('open'); }
+function openCard(card, name) {
+  card.classList.toggle('open');
+  hidePreview();
+  if (card.classList.contains('open')) {
+    addRecent(name);
+  }
+}
 
 function copyMacro(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
@@ -525,6 +758,71 @@ function copyMacro(btn, text) {
   });
 }
 
+/* ── Sidebar: Favorites ── */
+function renderFavSidebar() {
+  const list = document.getElementById('favList');
+  const favs = getFavorites();
+  if (favs.length === 0) {
+    list.innerHTML = '<div class="sidebar-empty">Pin macros you use often</div>';
+    return;
+  }
+  let html = '';
+  for (const name of favs) {
+    html += '<div class="sidebar-fav-item" onclick="scrollToMacro(\'' + escHtml(name).replace(/'/g, "\\'") + '\')">';
+    html += '<span style="color:var(--fav-color);font-size:12px;">&#9733;</span>';
+    html += '<span class="fav-name">' + escHtml(name) + '</span>';
+    html += '<span class="remove-fav" title="Remove" onclick="event.stopPropagation(); toggleFavorite(\'' + escHtml(name).replace(/'/g, "\\'") + '\')">&times;</span>';
+    html += '</div>';
+  }
+  list.innerHTML = html;
+}
+
+/* ── Sidebar: Recently Viewed ── */
+function renderRecentSidebar() {
+  const list = document.getElementById('recentList');
+  const recent = getRecent();
+  if (recent.length === 0) {
+    list.innerHTML = '<div class="sidebar-empty">No recent macros</div>';
+    return;
+  }
+  let html = '';
+  for (const name of recent.slice(0, 6)) {
+    html += '<div class="sidebar-recent-item" onclick="scrollToMacro(\'' + escHtml(name).replace(/'/g, "\\'") + '\')">';
+    html += '<span style="font-size:11px;">&#128337;</span>';
+    html += '<span class="recent-name">' + escHtml(name) + '</span>';
+    html += '</div>';
+  }
+  list.innerHTML = html;
+}
+
+function scrollToMacro(name) {
+  /* Clear filters to ensure macro is visible */
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  activeCategory = 'all';
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.cat-btn[data-cat="all"]').classList.add('active');
+  renderResults();
+
+  /* Find and open the card */
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.macro-card');
+    for (const card of cards) {
+      if (card.dataset.name === name) {
+        card.classList.add('open');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.boxShadow = '0 0 0 3px var(--accent-light)';
+        setTimeout(() => { card.style.boxShadow = ''; }, 2000);
+        addRecent(name);
+        break;
+      }
+    }
+  }, 50);
+}
+
+/* ── Init sidebars and render ── */
+renderFavSidebar();
+renderRecentSidebar();
 renderResults();
 </script>
 </body>
