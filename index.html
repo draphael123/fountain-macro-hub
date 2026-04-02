@@ -1994,37 +1994,21 @@ function setMode(mode) {
   currentMode = mode;
   const input = document.getElementById('searchInput');
   const helpText = document.getElementById('searchHelpText');
-  
+
   document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
-  
+
   if (mode === 'ask') {
-    input.placeholder = 'Ask a question about Fountain workflows...';
-    if (helpText) helpText.classList.add('visible');
-    const toolbar = document.getElementById('scenarioToolbar');
-    if (toolbar && !input.value.trim()) toolbar.classList.add('visible');
+    document.body.classList.add('chat-mode');
+    setTimeout(function() { document.getElementById('chatInput').focus(); }, 100);
   } else {
-    input.placeholder = 'Search macros...';
+    document.body.classList.remove('chat-mode');
+    input.placeholder = 'Search macros by name or content... (Ctrl+K)';
     if (helpText) helpText.classList.remove('visible');
     const toolbar = document.getElementById('scenarioToolbar');
     if (toolbar) toolbar.classList.remove('visible');
-  }
-  
-  const query = input.value;
-  if (query) {
-    if (mode === 'ask') {
-      renderAskResults(query);
-    } else {
-      renderResults();
-    }
-  } else {
-    if (mode === 'ask') {
-      const container = document.getElementById('results');
-      container.innerHTML = '<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><h3>Ask a question about Fountain workflows</h3><p>Type a question above or click a scenario below to get started.</p></div>';
-    } else {
-      renderResults();
-    }
+    renderResults();
   }
 }
 
