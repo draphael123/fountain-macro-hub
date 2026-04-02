@@ -12,13 +12,27 @@
   .auth-overlay {
     position: fixed; inset: 0; z-index: 9999;
     background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%);
+    background-image: var(--auth-bg), linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%);
     display: flex; align-items: center; justify-content: center;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    animation: authBgShift 8s ease infinite alternate;
+  }
+
+  @keyframes authBgShift {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
   }
   .auth-overlay.hidden { display: none; }
   .auth-box {
-    background: #fff; border-radius: 16px; padding: 48px 40px; width: 380px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.2); text-align: center;
+    background: #fff; border-radius: 20px; padding: 48px 40px; width: 400px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25); text-align: center;
+    animation: authBoxIn 0.5s cubic-bezier(0.16,1,0.3,1);
+    backdrop-filter: blur(20px);
+  }
+
+  @keyframes authBoxIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
   .auth-box svg { margin-bottom: 16px; }
   .auth-box h1 { font-size: 22px; color: #1e293b; margin-bottom: 4px; }
@@ -61,7 +75,76 @@
     --var-bg: #ede9fe;
     --var-color: #7c3aed;
     --var-border: #c4b5fd;
+    --topbar-accent: #0d9488;
+    --mode-indicator: #0d9488;
+    --auth-bg: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
+
+  /* Dark mode */
+  body.dark-mode {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-hover: #334155;
+    --border: #334155;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-light: rgba(13,148,136,0.15);
+    --highlight: #854d0e;
+    --category-bg: #334155;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+    --var-bg: rgba(124,58,237,0.15);
+    --var-border: rgba(167,139,250,0.3);
+  }
+
+  body.dark-mode .auth-overlay {
+    background: linear-gradient(135deg, #0c4a44 0%, #115e56 50%, #0f766e 100%);
+  }
+
+  body.dark-mode .auth-box {
+    background: #1e293b;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  }
+
+  body.dark-mode .auth-box h1 { color: #f1f5f9; }
+  body.dark-mode .auth-box p { color: #94a3b8; }
+  body.dark-mode .auth-input {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+  body.dark-mode .auth-input:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(13,148,136,0.2);
+  }
+
+  body.dark-mode .workflow-card {
+    background: linear-gradient(135deg, rgba(13,148,136,0.08) 0%, rgba(16,185,129,0.06) 100%);
+    border-color: rgba(13,148,136,0.25);
+  }
+
+  body.dark-mode .workflow-preview::after {
+    background: linear-gradient(transparent, rgba(13,148,136,0.08));
+  }
+
+  body.dark-mode .workflow-category {
+    background: rgba(13,148,136,0.15);
+    color: #5eead4;
+  }
+
+  body.dark-mode .chat-ai-content code {
+    background: #0f172a;
+    color: #e2e8f0;
+  }
+
+  body.dark-mode .source-detail-overlay {
+    background: rgba(0,0,0,0.6);
+  }
+
+  body.dark-mode ::-webkit-scrollbar-thumb { background: #475569; }
+  body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -71,6 +154,7 @@
     color: var(--text);
     line-height: 1.5;
     min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 
   .topbar {
@@ -286,12 +370,53 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     margin-bottom: 10px;
-    transition: all 0.15s;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
     overflow: hidden;
     position: relative;
   }
 
-  .macro-card:hover { box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+  .macro-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .macro-card .quick-copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s;
+    z-index: 2;
+    color: var(--text-secondary);
+  }
+
+  .macro-card:hover .quick-copy-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .macro-card .quick-copy-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .macro-card .quick-copy-btn.copied {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+  }
 
   .macro-header {
     padding: 14px 18px;
@@ -319,10 +444,11 @@
   .macro-info { flex: 1; min-width: 0; }
 
   .macro-name {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 15.5px;
+    font-weight: 700;
     color: var(--text);
     line-height: 1.3;
+    letter-spacing: -0.01em;
   }
 
   .macro-meta {
@@ -475,7 +601,30 @@
   @media (max-width: 900px) {
     .sidebar { display: none; }
     .layout { flex-direction: column; }
-    .main { max-height: none; }
+    .main { max-height: none; padding: 16px; }
+    .topbar { padding: 10px 16px; gap: 8px 12px; }
+    .logo { font-size: 16px; }
+    .mode-toggle { order: 10; flex-basis: 100%; justify-content: center; }
+    .search-wrap { min-width: 0; }
+    .chat-suggestions { grid-template-columns: 1fr; }
+    .chat-history { padding: 20px 16px 16px; }
+    .chat-input-bar { padding: 12px 16px 16px; }
+    .chat-message-user .chat-bubble { max-width: 85%; }
+    .source-detail-panel { max-width: 95vw; padding: 16px; }
+    .macro-header { padding: 12px 14px; }
+  }
+
+  @media (max-width: 600px) {
+    .topbar { padding: 8px 12px; }
+    .logo svg { width: 24px; height: 24px; }
+    .logo { font-size: 15px; gap: 6px; }
+    .mode-toggle button { padding: 5px 10px; font-size: 12px; }
+    .dark-mode-toggle { padding: 5px 8px; font-size: 14px; }
+    .search-input { font-size: 14px; padding: 8px 12px 8px 36px; }
+    .macro-name { font-size: 14px; }
+    .chat-welcome h2 { font-size: 18px; }
+    .chat-welcome p { font-size: 13px; }
+    .chat-suggestion-btn { padding: 10px 12px; font-size: 12.5px; }
   }
 
   ::-webkit-scrollbar { width: 6px; }
@@ -511,6 +660,40 @@
     color: var(--accent);
     box-shadow: var(--shadow-sm);
   }
+
+  /* Dark mode toggle */
+  .dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    font-size: 16px;
+  }
+
+  .dark-mode-toggle:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  /* Topbar mode color indicator bar */
+  .topbar-mode-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--mode-indicator);
+    transition: background 0.4s ease;
+  }
+
+
 
   .search-help-text {
     font-size: 12px;
@@ -950,6 +1133,12 @@
     width: 100%;
     z-index: 50;
     background: var(--bg);
+    animation: modeSlideIn 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  @keyframes modeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .chat-container.visible {
@@ -1494,22 +1683,27 @@
     color: var(--text);
   }
 
-  body.chat-mode .back-to-search { display: inline-flex; }
   body.chat-mode .search-wrap { display: none; }
   body.chat-mode .stats { display: none; }
-  body.chat-mode .mode-toggle { display: none; }
   body.chat-mode .search-help-text { display: none !important; }
   body.chat-mode .scenario-toolbar { display: none !important; }
 
-  body.leads-mode .back-to-search { display: inline-flex; }
   body.leads-mode .search-wrap { display: none; }
   body.leads-mode .stats { display: none; }
-  body.leads-mode .mode-toggle { display: none; }
   body.leads-mode .search-help-text { display: none !important; }
   body.leads-mode .scenario-toolbar { display: none !important; }
   body.leads-mode .chat-container { display: flex; }
   body.leads-mode .layout { display: none; }
   body.leads-mode .sidebar { display: none; }
+
+  /* Persistent tab bar — always visible in chat/leads mode */
+  body.chat-mode .mode-toggle,
+  body.leads-mode .mode-toggle {
+    display: inline-flex;
+  }
+
+  /* Hide old back button — tab bar replaces it */
+  .back-to-search { display: none !important; }
 
   .ai-answer-card {
     background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
@@ -1610,7 +1804,7 @@
 </div>
 
 <div class="app-content" id="appContent">
-<div class="topbar">
+<div class="topbar" style="position:relative;">
   <div class="logo">
     <svg width="30" height="30" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="58" fill="#0d9488"/><path d="M60 18c0 0-20 16-20 38c0 14 8 26 20 32c12-6 20-18 20-32C80 34 60 18 60 18z" fill="#fff" opacity="0.92"/><path d="M60 30c0 0-12 12-12 26c0 10 5 18 12 22c7-4 12-12 12-22C72 42 60 30 60 30z" fill="#0d9488" opacity="0.3"/></svg>
     Fountain Assistant
@@ -1626,7 +1820,9 @@
     <button class="mode-btn" data-mode="leads">Lead Response</button>
   </div>
   <button class="back-to-search" onclick="setMode('search')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Macros</button>
+  <button class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#x1F319;</button>
   <div class="search-help-text" id="searchHelpText">Try: "patient wants to cancel" or "how to process overnight shipping"</div>
+  <div class="topbar-mode-indicator" id="topbarModeIndicator"></div>
 </div>
 
 <div class="scenario-toolbar" id="scenarioToolbar">
@@ -2263,6 +2459,52 @@ function renderAskResults(query, triggerAI = false) {
 
 var activeChatMode = 'ask'; // 'ask' or 'leads'
 
+// Mode color themes
+var MODE_COLORS = {
+  search: { accent: '#0d9488', indicator: '#0d9488' },
+  ask: { accent: '#7c3aed', indicator: '#7c3aed' },
+  leads: { accent: '#059669', indicator: '#059669' }
+};
+
+function updateModeColors(mode) {
+  var colors = MODE_COLORS[mode] || MODE_COLORS.search;
+  var indicator = document.getElementById('topbarModeIndicator');
+  if (indicator) indicator.style.background = colors.indicator;
+}
+
+// Dark mode
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  var isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('fv_dark_mode', isDark ? '1' : '0');
+  var btn = document.getElementById('darkModeToggle');
+  if (btn) btn.innerHTML = isDark ? '&#x2600;&#xFE0F;' : '&#x1F319;';
+}
+
+function initDarkMode() {
+  if (localStorage.getItem('fv_dark_mode') === '1') {
+    document.body.classList.add('dark-mode');
+    var btn = document.getElementById('darkModeToggle');
+    if (btn) btn.innerHTML = '&#x2600;&#xFE0F;';
+  }
+}
+
+// Quick copy macro from card hover button
+function quickCopyMacro(index, btn) {
+  var m = macros[index];
+  if (!m) return;
+  var text = m.c || m.a || '';
+  navigator.clipboard.writeText(text).then(function() {
+    btn.classList.add('copied');
+    btn.innerHTML = '&#x2713;';
+    showCopyToast('Macro copied!');
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+    }, 1500);
+  });
+}
+
 function setMode(mode) {
   currentMode = mode;
   const input = document.getElementById('searchInput');
@@ -2276,6 +2518,7 @@ function setMode(mode) {
     activeChatMode = mode;
     document.body.classList.remove('chat-mode', 'leads-mode');
     document.body.classList.add(mode === 'leads' ? 'leads-mode' : 'chat-mode');
+    updateModeColors(mode);
 
     // Reset chat for mode switch
     chatHistory = [];
@@ -2306,6 +2549,7 @@ function setMode(mode) {
     setTimeout(function() { chatInput.focus(); }, 100);
   } else {
     document.body.classList.remove('chat-mode', 'leads-mode');
+    updateModeColors('search');
     input.placeholder = 'Search macros by name or content... (Ctrl+K)';
     if (helpText) helpText.classList.remove('visible');
     const toolbar = document.getElementById('scenarioToolbar');
@@ -2431,6 +2675,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
   });
 });
 
+initDarkMode();
 document.getElementById('totalStats').textContent = macros.length + ' macros';
 document.getElementById('allCount').textContent = macros.length;
 
@@ -2608,6 +2853,7 @@ function renderResults() {
     const macroId = 'mc_' + btoa(encodeURIComponent(m.n)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
 
     html += '<div class="macro-card" id="' + macroId + '" data-name="' + escHtml(m.n) + '" onmouseenter="showPreview(event, ' + JSON.stringify(JSON.stringify((m.c || '').substring(0, 500))) + ')" onmouseleave="hidePreview()">';
+    html += '<button class="quick-copy-btn" onclick="event.stopPropagation(); quickCopyMacro(' + i + ', this)" title="Quick copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
     html += '<div class="macro-header" onclick="openCard(this.parentElement, \'' + escHtml(m.n).replace(/'/g, "\\'") + '\')">';
     html += '<div class="macro-expand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
     html += '<div class="macro-info">';
