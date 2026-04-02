@@ -932,6 +932,488 @@
   }
 
   /* AI Answer card */
+
+  /* ── NotebookLM-style Chat Interface ── */
+  .chat-container {
+    display: none;
+    flex-direction: column;
+    height: calc(100vh - 57px);
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .chat-container.visible {
+    display: flex;
+  }
+
+  .chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 24px 24px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .chat-welcome-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.25);
+  }
+
+  .chat-welcome h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .chat-welcome p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    max-width: 400px;
+  }
+
+  .chat-suggestions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 520px;
+    width: 100%;
+  }
+
+  .chat-suggestion-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    cursor: pointer;
+    text-align: left;
+    font-size: 13.5px;
+    color: var(--text);
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .chat-suggestion-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .chat-suggestion-btn .suggestion-emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Chat messages */
+  .chat-message {
+    margin-bottom: 24px;
+    animation: chatFadeIn 0.3s ease-out;
+  }
+
+  @keyframes chatFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chat-message-user {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+
+  .chat-message-user .chat-bubble {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 16px 16px 4px 16px;
+    max-width: 70%;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .chat-message-ai {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .chat-ai-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .chat-ai-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .chat-ai-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #7c3aed;
+    margin-bottom: 6px;
+  }
+
+  .chat-ai-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px 16px 16px 16px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .chat-ai-content p { margin-bottom: 10px; }
+  .chat-ai-content p:last-child { margin-bottom: 0; }
+  .chat-ai-content strong { color: #7c3aed; font-weight: 600; }
+  .chat-ai-content ul, .chat-ai-content ol { margin: 8px 0 8px 20px; }
+  .chat-ai-content li { margin-bottom: 4px; }
+  .chat-ai-content code {
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  /* Thinking animation */
+  .chat-thinking {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+  }
+
+  .chat-thinking-dot {
+    width: 8px;
+    height: 8px;
+    background: #a78bfa;
+    border-radius: 50%;
+    animation: chatThinkingBounce 1.4s infinite ease-in-out;
+  }
+
+  .chat-thinking-dot:nth-child(1) { animation-delay: -0.32s; }
+  .chat-thinking-dot:nth-child(2) { animation-delay: -0.16s; }
+  .chat-thinking-dot:nth-child(3) { animation-delay: 0s; }
+
+  @keyframes chatThinkingBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Source cards below AI response */
+  .chat-sources {
+    margin-top: 12px;
+  }
+
+  .chat-sources-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+  }
+
+  .chat-sources-toggle:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  .chat-sources-toggle .toggle-arrow {
+    transition: transform 0.2s;
+    font-size: 10px;
+  }
+
+  .chat-sources-toggle.expanded .toggle-arrow {
+    transform: rotate(180deg);
+  }
+
+  .chat-sources-list {
+    display: none;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chat-sources-list.expanded {
+    display: flex;
+  }
+
+  .chat-source-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    max-width: 280px;
+  }
+
+  .chat-source-chip:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .chat-source-chip .source-icon {
+    flex-shrink: 0;
+  }
+
+  .chat-source-chip .source-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .chat-source-chip .source-type {
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--category-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Source detail modal */
+  .source-detail-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .source-detail-overlay.visible {
+    display: flex;
+  }
+
+  .source-detail-panel {
+    background: var(--surface);
+    border-radius: 16px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    padding: 24px;
+  }
+
+  .source-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .source-detail-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .source-detail-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--category-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 18px;
+    transition: all 0.15s;
+  }
+
+  .source-detail-close:hover {
+    background: #fee2e2;
+    color: #ef4444;
+  }
+
+  .source-detail-content {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .source-detail-actions {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+  }
+
+  .source-detail-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text);
+  }
+
+  .source-detail-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent-dark);
+  }
+
+  .source-detail-btn.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .source-detail-btn.primary:hover {
+    background: var(--accent-dark);
+  }
+
+  /* Chat input bar */
+  .chat-input-bar {
+    padding: 16px 24px 20px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .chat-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 6px 6px 6px 18px;
+    transition: all 0.2s;
+  }
+
+  .chat-input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+
+  .chat-input-field {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: transparent;
+    color: var(--text);
+    line-height: 1.5;
+    padding: 6px 0;
+  }
+
+  .chat-input-field::placeholder { color: var(--text-muted); }
+
+  .chat-send-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .chat-send-btn:hover { background: var(--accent-dark); }
+  .chat-send-btn:disabled { background: var(--border); cursor: default; }
+
+  .chat-powered-by {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* Hide sidebar + main in chat mode */
+  body.chat-mode .sidebar { display: none; }
+  body.chat-mode .main { display: none; }
+  body.chat-mode .layout { min-height: 0; }
+  body.chat-mode .chat-container { display: flex; }
+
+  /* Back to search button in topbar during chat mode */
+  .back-to-search {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--category-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .back-to-search:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  body.chat-mode .back-to-search { display: inline-flex; }
+  body.chat-mode .search-wrap { display: none; }
+  body.chat-mode .stats { display: none; }
+  body.chat-mode .mode-toggle { display: none; }
+  body.chat-mode .search-help-text { display: none !important; }
+  body.chat-mode .scenario-toolbar { display: none !important; }
+
   .ai-answer-card {
     background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
     border: 1.5px solid #c4b5fd;
@@ -1051,6 +1533,7 @@
     <button class="mode-btn active" data-mode="search">Macro Search</button>
     <button class="mode-btn" data-mode="ask">Ask a Question</button>
   </div>
+  <button class="back-to-search" onclick="setMode('search')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Macros</button>
   <div class="search-help-text" id="searchHelpText">Try: "patient wants to cancel" or "how to process overnight shipping"</div>
 </div>
 
@@ -1065,6 +1548,67 @@
   <button class="scenario-btn" onclick="quickSearchScenario('Schedule Visit')">📋 Schedule Visit</button>
   <button class="scenario-btn" onclick="quickSearchScenario('Escalation')">⚠️ Escalation</button>
   <button class="scenario-btn" onclick="quickSearchScenario('Plan Change')">🔄 Plan Change</button>
+</div>
+
+
+<div class="chat-container" id="chatContainer">
+  <div class="chat-history" id="chatHistory">
+    <div class="chat-welcome" id="chatWelcome">
+      <div class="chat-welcome-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <h2>Ask about Fountain workflows</h2>
+      <p>Get instant answers about processes, macros, and CS workflows. Powered by AI with access to all 550+ workflows and 1,156 macros.</p>
+      <div class="chat-suggestions">
+        <button class="chat-suggestion-btn" onclick="chatAsk('Patient wants to cancel their subscription')">
+          <span class="suggestion-emoji">&#x1F6AB;</span>
+          <span>Patient wants to cancel their subscription</span>
+        </button>
+        <button class="chat-suggestion-btn" onclick="chatAsk('How to process overnight shipping')">
+          <span class="suggestion-emoji">&#x1F4E6;</span>
+          <span>How to process overnight shipping</span>
+        </button>
+        <button class="chat-suggestion-btn" onclick="chatAsk('Patient needs a refund')">
+          <span class="suggestion-emoji">&#x1F4B0;</span>
+          <span>Patient needs a refund</span>
+        </button>
+        <button class="chat-suggestion-btn" onclick="chatAsk('How to handle a billing dispute')">
+          <span class="suggestion-emoji">&#x1F4B3;</span>
+          <span>How to handle a billing dispute</span>
+        </button>
+        <button class="chat-suggestion-btn" onclick="chatAsk('Patient asking about lab results')">
+          <span class="suggestion-emoji">&#x1F52C;</span>
+          <span>Patient asking about lab results</span>
+        </button>
+        <button class="chat-suggestion-btn" onclick="chatAsk('Escalation process for complaints')">
+          <span class="suggestion-emoji">&#x26A0;&#xFE0F;</span>
+          <span>Escalation process for complaints</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-bar">
+    <div class="chat-input-wrap">
+      <input type="text" class="chat-input-field" id="chatInput" placeholder="Ask a question about Fountain workflows..." autocomplete="off">
+      <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="chat-powered-by">Powered by Claude &middot; Searches 550 workflows &amp; 1,156 macros</div>
+  </div>
+</div>
+
+<div class="source-detail-overlay" id="sourceDetailOverlay" onclick="if(event.target===this)closeSourceDetail()">
+  <div class="source-detail-panel">
+    <div class="source-detail-header">
+      <div class="source-detail-title" id="sourceDetailTitle"></div>
+      <button class="source-detail-close" onclick="closeSourceDetail()">&times;</button>
+    </div>
+    <div class="source-detail-content" id="sourceDetailContent"></div>
+    <div class="source-detail-actions">
+      <button class="source-detail-btn primary" id="sourceDetailCopyBtn">Copy to clipboard</button>
+    </div>
+  </div>
 </div>
 
 <div class="preview-tooltip" id="previewTooltip"></div>
@@ -1224,17 +1768,16 @@ async function callClaudeAI(query, searchResults) {
   const _k = [53,4,88,15,26,21,68,15,38,0,68,82,65,62,56,74,85,65,89,66,30,23,68,23,36,53,61,36,53,62,3,16,45,92,38,15,116,123,122,117,49,11,2,41,66,86,38,39,17,92,29,18,57,42,56,52,3,96,67,91,10,23,48,11,28,47,62,38,33,81,30,32,32,62,6,23,81,69,66,83,12,58,45,35,38,27,44,0,25,11,77,83,4,17,5,58,118,115,69,27,3,22,58,1,13,32,40,47];
   const _x = 'FountainVitality2026';
   const apiKey = _k.map((c, i) => String.fromCharCode(c ^ _x.charCodeAt(i % _x.length))).join('');
-  
-  // Format context with search results
-  const workflowContext = searchResults.workflows.slice(0, 5)
-    .map(w => `- **${w.title}** (${w.category}): ${w.content.substring(0, 150)}...`)
-    .join('\\n');
-  
-  const macroContext = searchResults.macros.slice(0, 10)
-    .map(m => `- **${m.n}** (${m.cat}): ${(m.c || '').substring(0, 100)}...`)
-    .join('\\n');
 
-  const systemPrompt = `You are a Fountain Vitality Customer Service assistant. You help customer service reps find the right process steps and macros.
+  const workflowContext = searchResults.workflows.slice(0, 5)
+    .map(w => '- **' + w.title + '** (' + w.category + '): ' + w.content.substring(0, 300) + '...')
+    .join('\n');
+
+  const macroContext = searchResults.macros.slice(0, 10)
+    .map(m => '- **' + m.n + '** (' + m.cat + '): ' + (m.c || '').substring(0, 150) + '...')
+    .join('\n');
+
+  const systemPrompt = `You are a Fountain Vitality Customer Service assistant. You help CS reps find the right process steps and macros quickly.
 
 You have access to the following workflow and macro database:
 
@@ -1244,21 +1787,15 @@ ${workflowContext || 'None found'}
 **Available Macros:**
 ${macroContext || 'None found'}
 
-When answering questions:
-1. Reference specific workflow names and macro names from the database
-2. Format your response with clear sections using markdown
-3. Always mention macro names in **bold** so they can be identified
-4. Keep responses concise and actionable
-5. Recommend specific macros by name when relevant
-6. Reference workflow steps when applicable`;
+When answering:
+1. Start with a brief direct answer
+2. Reference specific workflow names and macro names from the database
+3. Use **bold** for macro names and workflow names
+4. Use numbered steps for processes
+5. Keep responses concise, actionable, and under 200 words
+6. If a macro can be used directly, say "Use the **MacroName** macro"`;
 
-  const userMessage = `Customer service question: "${query}"
-
-Based on the available workflows and macros above, provide a helpful response that:
-1. Suggests relevant process steps
-2. Recommends specific macros to use
-3. Explains how they work together
-Keep it brief and actionable.`;
+  const userMessage = 'CS Question: "' + query + '"\n\nProvide a clear, step-by-step answer referencing specific workflows and macros.';
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1274,160 +1811,184 @@ Keep it brief and actionable.`;
         max_tokens: 1024,
         temperature: 0,
         system: systemPrompt,
-        messages: [
-          {
-            role: 'user',
-            content: userMessage
-          }
-        ]
+        messages: [{ role: 'user', content: userMessage }]
       }),
       signal: claudeAbortController.signal
     });
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      throw new Error('API error: ' + response.status);
     }
 
     const data = await response.json();
     return data.content[0].text;
   } catch (error) {
-    if (error.name === 'AbortError') {
-      return null; // Request was cancelled
-    }
+    if (error.name === 'AbortError') return null;
     console.error('Claude API error:', error);
     return null;
   }
 }
 
 function renderAIAnswerCard(content) {
-  let html = '<div class="ai-answer-card">';
-  html += '<div class="ai-answer-header">🤖 AI Assistant</div>';
-  html += '<div class="ai-answer-content">' + escHtml(content) + '</div>';
-  html += '<div class="ai-powered-label">Powered by Claude</div>';
-  html += '</div>';
+  // Legacy - kept for compatibility
+  return '<div class="ai-answer-card"><div class="ai-answer-content">' + escHtml(content) + '</div></div>';
+}
+
+function simpleMarkdown(text) {
+  // Convert markdown-like text to HTML
+  let html = escHtml(text);
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Numbered lists
+  html = html.replace(/^(\d+)\.\s+(.+)$/gm, '<li>$2</li>');
+  html = html.replace(/(<li>.*<\/li>)/s, '<ol>$1</ol>');
+  // Bullet lists
+  html = html.replace(/^[-*]\s+(.+)$/gm, '<li>$1</li>');
+  // Paragraphs
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = '<p>' + html + '</p>';
+  html = html.replace(/<p><\/p>/g, '');
   return html;
 }
 
-function renderAskResults(query, triggerAI = false) {
-  const { workflows, macros: macroResults } = smartSearch(query);
-  const container = document.getElementById('results');
-  
-  // Show/hide scenario toolbar
-  const toolbar = document.getElementById('scenarioToolbar');
-  if (toolbar) {
-    toolbar.classList.toggle('visible', query.trim().length === 0);
-  }
-  
-  if (workflows.length === 0 && macroResults.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-        <h3>No results found</h3>
-        <p>Try rephrasing your question</p>
-      </div>
-    `;
-    return;
-  }
-  
-  let html = '';
-  
-  // Add loading AI card
-  html += '<div class="ai-answer-card">';
-  html += '<div class="ai-answer-header"><span class="ai-thinking">🤖</span> Thinking...</div>';
-  html += '</div>';
-  
-  if (workflows.length > 0) {
-    html += '<div class="results-section-title">📋 Relevant Processes</div>';
-    workflows.forEach(wf => {
-      const preview = wf.content.substring(0, 180);
-      const hasMore = wf.content.length > 180;
-      const relatedMacros = findRelatedMacros(wf, 3);
-      const steps = parseWorkflowSteps(wf.content);
-      const hasSteps = steps.length >= 2;
-      const wfContentJSON = JSON.stringify(wf.content);
-      
-      html += '<div class="workflow-card" data-wf-id="' + wf.id + '">';
-      html += '<div class="workflow-header">';
-      html += '<div class="workflow-icon">📋</div>';
-      html += '<div class="workflow-title-wrap">';
-      html += '<div class="workflow-title">' + escHtml(wf.title) + '</div>';
-      html += '<div class="workflow-meta">';
-      html += '<span class="workflow-category">' + wf.category + '</span>';
-      html += '<span class="workflow-relevance">' + getRelevanceLabel(wf.score) + '</span>';
-      html += '</div></div></div>';
-      html += '<div class="workflow-preview" data-wf-id="' + wf.id + '">' + escHtml(preview) + (hasMore ? '...' : '') + '</div>';
-      html += '<div style="margin-top: 10px;">';
-      html += '<button class="workflow-copy-btn" onclick="event.stopPropagation(); copyWorkflow(this, ' + wfContentJSON + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy workflow</button>';
-      if (hasSteps) {
-        html += '<button class="workflow-wizard-btn" onclick="event.stopPropagation(); toggleWizard(this, ' + wfContentJSON + ', ' + wf.id + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 12 19 12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg> Step-by-Step Mode</button>';
-      }
-      html += '</div>';
-      
-      if (relatedMacros.length > 0) {
-        html += '<div class="related-macros-container">';
-        html += '<div class="related-macros-title">💬 Related Macros</div>';
-        relatedMacros.forEach(m => {
-          const mContentJSON = JSON.stringify(m.c);
-          html += '<div class="related-macro-card">';
-          html += '<div class="related-macro-name">' + escHtml(m.n) + '</div>';
-          html += '<div class="related-macro-category">' + escHtml(m.cat) + '</div>';
-          html += '<button class="related-macro-copy-btn" onclick="copyRelatedMacro(this, ' + mContentJSON + ')">📋 Copy</button>';
+function chatAsk(question) {
+  const input = document.getElementById('chatInput');
+  input.value = question;
+  sendChatMessage();
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const query = input.value.trim();
+  if (!query) return;
+
+  // Hide welcome screen
+  const welcome = document.getElementById('chatWelcome');
+  if (welcome) welcome.style.display = 'none';
+
+  const history = document.getElementById('chatHistory');
+
+  // Add user message
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-message chat-message-user';
+  userMsg.innerHTML = '<div class="chat-bubble">' + escHtml(query) + '</div>';
+  history.appendChild(userMsg);
+
+  // Add thinking indicator
+  const aiMsg = document.createElement('div');
+  aiMsg.className = 'chat-message chat-message-ai';
+  aiMsg.innerHTML = '<div class="chat-ai-avatar">&#x1F916;</div>' +
+    '<div class="chat-ai-body">' +
+    '<div class="chat-ai-label">Fountain AI Assistant</div>' +
+    '<div class="chat-ai-content">' +
+    '<div class="chat-thinking">' +
+    '<div class="chat-thinking-dot"></div>' +
+    '<div class="chat-thinking-dot"></div>' +
+    '<div class="chat-thinking-dot"></div>' +
+    '</div></div></div>';
+  history.appendChild(aiMsg);
+
+  // Scroll to bottom
+  history.scrollTop = history.scrollHeight;
+
+  // Clear input
+  input.value = '';
+
+  // Run keyword search for context
+  const searchResults = smartSearch(query);
+
+  // Call AI
+  callClaudeAI(query, searchResults).then(aiResponse => {
+    const contentEl = aiMsg.querySelector('.chat-ai-content');
+
+    if (aiResponse) {
+      let html = simpleMarkdown(aiResponse);
+
+      // Add source chips
+      const sources = [];
+      searchResults.workflows.slice(0, 4).forEach(w => {
+        sources.push({ type: 'workflow', icon: '&#x1F4CB;', name: w.title, category: w.category, content: w.content });
+      });
+      searchResults.macros.slice(0, 4).forEach(m => {
+        sources.push({ type: 'macro', icon: '&#x1F4AC;', name: m.n, category: m.cat, content: m.c || m.a || '' });
+      });
+
+      if (sources.length > 0) {
+        html += '<div class="chat-sources">';
+        html += '<button class="chat-sources-toggle" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('expanded')">';
+        html += '<span class="toggle-arrow">&#x25BC;</span> ' + sources.length + ' sources found';
+        html += '</button>';
+        html += '<div class="chat-sources-list">';
+        sources.forEach((s, i) => {
+          const contentJson = JSON.stringify(s.content).replace(/'/g, '&#39;');
+          const nameJson = JSON.stringify(s.name).replace(/'/g, '&#39;');
+          html += '<div class="chat-source-chip" onclick="openSourceDetail(' + nameJson + ', ' + contentJson + ')">';
+          html += '<span class="source-icon">' + s.icon + '</span>';
+          html += '<span class="source-name">' + escHtml(s.name) + '</span>';
+          html += '<span class="source-type">' + s.type + '</span>';
           html += '</div>';
         });
-        html += '</div>';
+        html += '</div></div>';
       }
-      
-      html += '</div>';
-    });
-  }
-  
-  if (macroResults.length > 0) {
-    html += '<div class="results-section-title">💬 Suggested Macros</div>';
-    macroResults.forEach(m => {
-      html += renderMacroCard(m);
-    });
-  }
-  
-  container.innerHTML = html;
-  
-  // Attach workflow card click handlers
-  document.querySelectorAll('.workflow-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('button')) return;
-      const wfId = this.dataset.wfId;
-      const workflow = WORKFLOW_DB.find(w => w.id == wfId);
-      const preview = this.querySelector('.workflow-preview');
-      
-      preview.classList.toggle('expanded');
-      
-      if (preview.classList.contains('expanded')) {
-        preview.textContent = workflow.content;
-      } else {
-        const text = workflow.content;
-        preview.textContent = text.substring(0, 180) + (text.length > 180 ? '...' : '');
-      }
-    });
-  });
-  
-  // Attach macro card handlers
-  document.querySelectorAll('.macro-card').forEach(card => {
-    attachMacroCardHandlers(card);
-  });
-  
-  // Call Claude API in background (only when triggered by Enter or scenario click)
-  if (!triggerAI) return;
-  callClaudeAI(query, { workflows, macros: macroResults }).then(aiResponse => {
-    if (aiResponse) {
-      const aiCard = container.querySelector('.ai-answer-card');
-      if (aiCard && aiCard.querySelector('.ai-thinking')) {
-        aiCard.outerHTML = renderAIAnswerCard(aiResponse);
-      }
+
+      contentEl.innerHTML = html;
+    } else {
+      contentEl.innerHTML = '<p>Sorry, I couldn&#39;t get a response. Here are the most relevant results from keyword search:</p>' +
+        buildFallbackSources(searchResults);
     }
-  }).catch(error => {
-    console.error('AI search error:', error);
-    // Error is already silently handled, keyword results are still showing
+
+    history.scrollTop = history.scrollHeight;
+  }).catch(err => {
+    console.error('Chat error:', err);
+    const contentEl = aiMsg.querySelector('.chat-ai-content');
+    contentEl.innerHTML = '<p>Something went wrong. Here are keyword search results instead:</p>' +
+      buildFallbackSources(searchResults);
+    history.scrollTop = history.scrollHeight;
   });
 }
+
+function buildFallbackSources(searchResults) {
+  let html = '<div class="chat-sources"><div class="chat-sources-list expanded">';
+  searchResults.workflows.slice(0, 5).forEach(w => {
+    const contentJson = JSON.stringify(w.content).replace(/'/g, '&#39;');
+    const nameJson = JSON.stringify(w.title).replace(/'/g, '&#39;');
+    html += '<div class="chat-source-chip" onclick="openSourceDetail(' + nameJson + ', ' + contentJson + ')">';
+    html += '<span class="source-icon">&#x1F4CB;</span><span class="source-name">' + escHtml(w.title) + '</span>';
+    html += '<span class="source-type">workflow</span></div>';
+  });
+  searchResults.macros.slice(0, 5).forEach(m => {
+    const contentJson = JSON.stringify(m.c || m.a || '').replace(/'/g, '&#39;');
+    const nameJson = JSON.stringify(m.n).replace(/'/g, '&#39;');
+    html += '<div class="chat-source-chip" onclick="openSourceDetail(' + nameJson + ', ' + contentJson + ')">';
+    html += '<span class="source-icon">&#x1F4AC;</span><span class="source-name">' + escHtml(m.n) + '</span>';
+    html += '<span class="source-type">macro</span></div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function openSourceDetail(title, content) {
+  document.getElementById('sourceDetailTitle').textContent = title;
+  document.getElementById('sourceDetailContent').textContent = content;
+  document.getElementById('sourceDetailOverlay').classList.add('visible');
+  document.getElementById('sourceDetailCopyBtn').onclick = function() {
+    navigator.clipboard.writeText(content).then(() => {
+      this.textContent = 'Copied!';
+      setTimeout(() => { this.textContent = 'Copy to clipboard'; }, 1500);
+    });
+  };
+}
+
+function closeSourceDetail() {
+  document.getElementById('sourceDetailOverlay').classList.remove('visible');
+}
+
+function renderAskResults(query, triggerAI = false) {
+  // Legacy function - no longer used in chat mode
+  // Kept for compatibility with input handler
+  return;
+}
+
 
 function setMode(mode) {
   currentMode = mode;
@@ -1529,21 +2090,17 @@ document.getElementById('searchInput').addEventListener('input', function() {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
     searchQuery = this.value.trim().toLowerCase();
-    if (currentMode === 'ask') {
-      renderAskResults(this.value.trim());
-    } else {
+    if (currentMode !== 'ask') {
       renderResults();
     }
   }, 120);
 });
 
-// Trigger AI search on Enter key
-document.getElementById('searchInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && currentMode === 'ask') {
+// Chat input Enter key handler
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
     e.preventDefault();
-    clearTimeout(debounceTimer);
-    searchQuery = this.value.trim();
-    renderAskResults(this.value.trim(), true);
+    sendChatMessage();
   }
 });
 
@@ -1737,10 +2294,15 @@ function copyMacro(btn, text) {
 
 
 function quickSearchScenario(scenario) {
-  const input = document.getElementById('searchInput');
-  input.value = scenario;
-  searchQuery = scenario.toLowerCase();
-  renderAskResults(scenario, true);
+  // Legacy - scenarios are now chat suggestions
+  if (currentMode === 'ask') {
+    chatAsk(scenario);
+  } else {
+    const input = document.getElementById('searchInput');
+    input.value = scenario;
+    searchQuery = scenario.toLowerCase();
+    renderResults();
+  }
 }
 
 function renderMacroCard(m) {
