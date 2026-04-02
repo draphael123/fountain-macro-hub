@@ -7,6 +7,8 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Fountain Assistant</title>
+<link rel="icon" type="image/png" href="fountain-logo.png">
+<link rel="apple-touch-icon" href="fountain-logo.png">
 <style>
   /* Password gate */
   .auth-overlay {
@@ -34,7 +36,7 @@
     from { opacity: 0; transform: translateY(20px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
-  .auth-box svg { margin-bottom: 16px; }
+  .auth-box img { margin-bottom: 16px; }
   .auth-box h1 { font-size: 22px; color: #1e293b; margin-bottom: 4px; }
   .auth-box p { font-size: 14px; color: #64748b; margin-bottom: 24px; }
   .auth-input {
@@ -1822,7 +1824,7 @@
 
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
-    <svg width="48" height="48" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="58" fill="#0d9488"/><path d="M60 18c0 0-20 16-20 38c0 14 8 26 20 32c12-6 20-18 20-32C80 34 60 18 60 18z" fill="#fff" opacity="0.92"/><path d="M60 30c0 0-12 12-12 26c0 10 5 18 12 22c7-4 12-12 12-22C72 42 60 30 60 30z" fill="#0d9488" opacity="0.3"/></svg>
+    <img src="fountain-logo.png" alt="Fountain Logo" width="64" height="64" style="border-radius: 12px; margin-bottom: 16px;">
     <h1>Fountain Assistant</h1>
     <p>Enter the team password to continue</p>
     <form onsubmit="return checkAuth()">
@@ -1836,7 +1838,7 @@
 <div class="app-content" id="appContent">
 <nav class="topbar" style="position:relative;" role="navigation" aria-label="Main navigation">
   <div class="logo">
-    <svg width="30" height="30" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="58" fill="#0d9488"/><path d="M60 18c0 0-20 16-20 38c0 14 8 26 20 32c12-6 20-18 20-32C80 34 60 18 60 18z" fill="#fff" opacity="0.92"/><path d="M60 30c0 0-12 12-12 26c0 10 5 18 12 22c7-4 12-12 12-22C72 42 60 30 60 30z" fill="#0d9488" opacity="0.3"/></svg>
+    <img src="fountain-logo.png" alt="Fountain Logo" width="30" height="30" style="border-radius: 6px;">
     Fountain Assistant
   </div>
   <div class="search-wrap">
