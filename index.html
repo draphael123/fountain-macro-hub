@@ -2105,12 +2105,13 @@ When responding:
 2. Be warm, empathetic, and confident — not pushy or salesy
 3. Address the lead's specific concern or question head-on
 4. Include a clear call-to-action (book a consultation, schedule labs, etc.)
-5. Keep the response conversational and under 200 words
+5. CRITICAL: Keep the draft response to ONE short paragraph (3-5 sentences, under 80 words). Leads respond better to brief, punchy messages — not walls of text.
 6. If relevant, reference specific macros using **bold** names
-7. After the draft response, add a brief "Rep Notes" section with talking points if they call back
-8. Never make medical claims or guarantees about outcomes`;
+7. After the draft, add 2-3 bullet points as "Rep Notes" (one line each) only if truly needed
+8. Never make medical claims or guarantees about outcomes
+9. Do NOT use headers, numbered lists, or heavy formatting in the draft — write it like a natural message`;
 
-    userMessage = 'Lead scenario: "' + query + '"\n\nDraft a ready-to-send response to convert this lead, plus brief rep notes.';
+    userMessage = 'Lead scenario: "' + query + '"\n\nDraft a SHORT (one paragraph) ready-to-send response to convert this lead.';
   } else {
     systemPrompt = `You are a Fountain Vitality Customer Service assistant. You help CS reps find the right process steps and macros quickly.
 
@@ -2123,15 +2124,15 @@ ${workflowContext || 'None found'}
 ${macroContext || 'None found'}
 
 When answering:
-1. Start with a brief direct answer
+1. Start with a brief direct answer in one paragraph (3-5 sentences)
 2. Reference specific workflow names and macro names from the database
 3. Use **bold** for macro names and workflow names so they become clickable links
-4. Use numbered steps for processes
-5. Keep responses concise, actionable, and under 250 words
+4. Only use numbered steps if the process truly requires them — otherwise write in short prose
+5. Keep responses under 100 words. Be direct, not verbose.
 6. If a macro can be used directly, say "Use the **MacroName** macro"
 7. When referencing macros, use their EXACT name from the database so they link correctly`;
 
-    userMessage = 'CS Question: "' + query + '"\n\nProvide a clear, step-by-step answer referencing specific workflows and macros.';
+    userMessage = 'CS Question: "' + query + '"\n\nProvide a brief, direct answer referencing specific workflows and macros. Keep it to about one paragraph.';
   }
 
   // Build messages array with conversation history for follow-up context
@@ -2153,7 +2154,7 @@ When answering:
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1024,
+        max_tokens: activeChatMode === 'leads' ? 400 : 512,
         temperature: 0,
         system: systemPrompt,
         messages: messages
