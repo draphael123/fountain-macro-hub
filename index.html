@@ -937,10 +937,16 @@
   .chat-container {
     display: none;
     flex-direction: column;
-    height: calc(100vh - 57px);
+    position: fixed;
+    top: 57px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     max-width: 860px;
     margin: 0 auto;
     width: 100%;
+    z-index: 50;
+    background: var(--bg);
   }
 
   .chat-container.visible {
