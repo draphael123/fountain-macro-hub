@@ -1585,7 +1585,7 @@
 
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
-    <svg width="48" height="48" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="58" fill="#0d9488"/><path d="M60 18c0 0-20 16-20 38c0 14 8 26 20 32c12-6 20-18 20-32C80 34 60 18 60 18z" fill="#fff" opacity="0.92"/><path d="M60 30c0 0-12 12-12 26c0 10 5 18 12 22c7-4 12-12 12-22C72 42 60 30 60 30z" fill="#0d9488" opacity="0.3"/></svg>
+    <svg width="48" height="48" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 42c2-10 6-18 12-24c-4 8-5 16-4 24" fill="#0f172a"/><path d="M24 38c3-8 8-16 14-20c-3 8-4 14-3 22" fill="#0f172a"/><path d="M30 34c4-6 10-12 16-14c-2 6-4 12-4 18" fill="#0d9488"/><path d="M20 42c0 2 0 4 0 6" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
     <h1>Fountain Macro Hub</h1>
     <p>Enter the team password to continue</p>
     <form onsubmit="return checkAuth()">
@@ -1599,13 +1599,7 @@
 <div class="app-content" id="appContent">
 <div class="topbar">
   <div class="logo">
-    <svg width="30" height="30" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="60" r="58" fill="#0d9488"/>
-      <path d="M60 18c0 0-20 16-20 38c0 14 8 26 20 32c12-6 20-18 20-32C80 34 60 18 60 18z" fill="#ffffff" opacity="0.92"/>
-      <path d="M60 30c0 0-12 12-12 26c0 10 5 18 12 22c7-4 12-12 12-22C72 42 60 30 60 30z" fill="#0d9488" opacity="0.3"/>
-      <path d="M58 44c-2 6-3 14 0 22c2 4 4 6 6 8" stroke="#0d9488" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-      <path d="M48 68c4-2 8-2 12 0c4 2 8 2 12 0" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-    </svg>
+    <svg width="30" height="30" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 42c2-10 6-18 12-24c-4 8-5 16-4 24" fill="#0f172a"/><path d="M24 38c3-8 8-16 14-20c-3 8-4 14-3 22" fill="#0f172a"/><path d="M30 34c4-6 10-12 16-14c-2 6-4 12-4 18" fill="#0d9488"/><path d="M20 42c0 2 0 4 0 6" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
     Fountain Macro Hub
   </div>
   <div class="search-wrap">
@@ -1844,6 +1838,10 @@ function getRelevanceLabel(score) {
 // Global abort controller for Claude API calls
 let claudeAbortController = null;
 
+// Conversation memory — stores last N exchanges for follow-up context
+var chatHistory = [];
+var MAX_CHAT_HISTORY = 4; // number of exchange pairs to remember
+
 async function callClaudeAI(query, searchResults) {
   // Cancel previous request if still in flight
   if (claudeAbortController) {
@@ -1855,12 +1853,13 @@ async function callClaudeAI(query, searchResults) {
   const _x = 'FountainVitality2026';
   const apiKey = _k.map((c, i) => String.fromCharCode(c ^ _x.charCodeAt(i % _x.length))).join('');
 
+  // Richer context: 800 chars per workflow (up from 300), 300 chars per macro (up from 150)
   const workflowContext = searchResults.workflows.slice(0, 5)
-    .map(w => '- **' + w.title + '** (' + w.category + '): ' + w.content.substring(0, 300) + '...')
+    .map(w => '- **' + w.title + '** (' + w.category + '): ' + w.content.substring(0, 800) + (w.content.length > 800 ? '...' : ''))
     .join('\n');
 
   const macroContext = searchResults.macros.slice(0, 10)
-    .map(m => '- **' + m.n + '** (' + m.cat + '): ' + (m.c || '').substring(0, 150) + '...')
+    .map(m => '- **' + m.n + '** (' + m.cat + '): ' + (m.c || '').substring(0, 300) + ((m.c || '').length > 300 ? '...' : ''))
     .join('\n');
 
   const systemPrompt = `You are a Fountain Vitality Customer Service assistant. You help CS reps find the right process steps and macros quickly.
@@ -1876,12 +1875,21 @@ ${macroContext || 'None found'}
 When answering:
 1. Start with a brief direct answer
 2. Reference specific workflow names and macro names from the database
-3. Use **bold** for macro names and workflow names
+3. Use **bold** for macro names and workflow names so they become clickable links
 4. Use numbered steps for processes
-5. Keep responses concise, actionable, and under 200 words
-6. If a macro can be used directly, say "Use the **MacroName** macro"`;
+5. Keep responses concise, actionable, and under 250 words
+6. If a macro can be used directly, say "Use the **MacroName** macro"
+7. When referencing macros, use their EXACT name from the database so they link correctly`;
 
   const userMessage = 'CS Question: "' + query + '"\n\nProvide a clear, step-by-step answer referencing specific workflows and macros.';
+
+  // Build messages array with conversation history for follow-up context
+  var messages = [];
+  chatHistory.forEach(function(exchange) {
+    messages.push({ role: 'user', content: exchange.user });
+    messages.push({ role: 'assistant', content: exchange.assistant });
+  });
+  messages.push({ role: 'user', content: userMessage });
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1897,7 +1905,7 @@ When answering:
         max_tokens: 1024,
         temperature: 0,
         system: systemPrompt,
-        messages: [{ role: 'user', content: userMessage }]
+        messages: messages
       }),
       signal: claudeAbortController.signal
     });
@@ -2038,32 +2046,45 @@ function sendChatMessage() {
   // Run keyword search for context
   const searchResults = smartSearch(query);
 
-  // Call AI
-  callClaudeAI(query, searchResults).then(aiResponse => {
-    const contentEl = aiMsg.querySelector('.chat-ai-content');
+  // Check pre-cached answers first
+  var cachedAnswer = getCachedAnswer(query);
+
+  function renderResponse(aiResponse) {
+    var contentEl = aiMsg.querySelector('.chat-ai-content');
 
     if (aiResponse) {
-      let html = simpleMarkdown(aiResponse);
+      // Save to conversation memory
+      chatHistory.push({ user: query, assistant: aiResponse });
+      if (chatHistory.length > MAX_CHAT_HISTORY) chatHistory.shift();
+
+      var html = simpleMarkdown(aiResponse);
       html = linkifyMacros(html);
 
-      // Add source chips
-      const sources = [];
-      searchResults.workflows.slice(0, 4).forEach(w => {
+      // Copy full response button
+      var safeResponse = aiResponse.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      html += '<div style="margin-top:12px; display:flex; gap:8px; align-items:center;">';
+      html += '<button onclick="copyFullResponse(this)" data-response="' + safeResponse + '" style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background=\'var(--accent-light)\'" onmouseout="this.style.background=\'var(--surface)\'">';
+      html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      html += ' Copy response</button></div>';
+
+      // Add source chips — auto-expanded
+      var sources = [];
+      searchResults.workflows.slice(0, 4).forEach(function(w) {
         sources.push({ type: 'workflow', icon: '&#x1F4CB;', name: w.title, category: w.category, content: w.content });
       });
-      searchResults.macros.slice(0, 4).forEach(m => {
+      searchResults.macros.slice(0, 4).forEach(function(m) {
         sources.push({ type: 'macro', icon: '&#x1F4AC;', name: m.n, category: m.cat, content: m.c || m.a || '' });
       });
 
       if (sources.length > 0) {
         html += '<div class="chat-sources">';
-        html += '<button class="chat-sources-toggle" onclick="this.classList.toggle(\'expanded\'); this.nextElementSibling.classList.toggle(\'expanded\')">';
-        html += '<span class="toggle-arrow">&#x25BC;</span> ' + sources.length + ' sources found';
+        html += '<button class="chat-sources-toggle expanded" onclick="this.classList.toggle(\'expanded\'); this.nextElementSibling.classList.toggle(\'expanded\')">';
+        html += '<span class="toggle-arrow">&#x25BC;</span> ' + sources.length + ' sources';
         html += '</button>';
-        html += '<div class="chat-sources-list">';
-        sources.forEach((s, i) => {
-          const contentJson = JSON.stringify(s.content).replace(/'/g, '&#39;');
-          const nameJson = JSON.stringify(s.name).replace(/'/g, '&#39;');
+        html += '<div class="chat-sources-list expanded">';
+        sources.forEach(function(s) {
+          var contentJson = JSON.stringify(s.content).replace(/'/g, '&#39;');
+          var nameJson = JSON.stringify(s.name).replace(/'/g, '&#39;');
           html += '<div class="chat-source-chip" onclick="openSourceDetail(' + nameJson + ', ' + contentJson + ')">';
           html += '<span class="source-icon">' + s.icon + '</span>';
           html += '<span class="source-name">' + escHtml(s.name) + '</span>';
@@ -2080,12 +2101,55 @@ function sendChatMessage() {
     }
 
     history.scrollTop = history.scrollHeight;
-  }).catch(err => {
-    console.error('Chat error:', err);
-    const contentEl = aiMsg.querySelector('.chat-ai-content');
-    contentEl.innerHTML = '<p>Something went wrong. Here are keyword search results instead:</p>' +
-      buildFallbackSources(searchResults);
-    history.scrollTop = history.scrollHeight;
+  }
+
+  if (cachedAnswer) {
+    // Instant response for pre-cached scenarios
+    setTimeout(function() { renderResponse(cachedAnswer); }, 150);
+  } else {
+    // Call AI
+    callClaudeAI(query, searchResults).then(renderResponse).catch(function(err) {
+      console.error('Chat error:', err);
+      var contentEl = aiMsg.querySelector('.chat-ai-content');
+      contentEl.innerHTML = '<p>Something went wrong. Here are keyword search results instead:</p>' +
+        buildFallbackSources(searchResults);
+      history.scrollTop = history.scrollHeight;
+    });
+  }
+}
+
+// Pre-cached instant answers for common scenarios
+var CACHED_ANSWERS = {
+  'patient wants to cancel their subscription': '# Cancellation Process\n\n**Step 1: Acknowledge their request**\nShow empathy and confirm you understand they want to cancel.\n\n**Step 2: Identify the reason**\nAsk why they want to cancel — this helps determine if there\'s a save opportunity.\n\n**Step 3: Use the appropriate macro**\n\n- If they\'re firm on cancelling: Use the **General CS: Cancellation** macro to process the request\n- If they mention cost concerns: Use the **General CS: Switch plans** macro to offer a downgrade\n- If they\'re unhappy with results: Use the **General CS: Escalation to provider** macro to schedule a provider check-in\n\n**Step 4: Process the cancellation**\nIf the patient confirms, follow the cancellation workflow in Akute. Make sure to:\n- Document the reason\n- Confirm any remaining refills or pending orders\n- Send the cancellation confirmation\n\n**Key Point:** Always try to understand the "why" before processing — many cancellations can be saved with the right intervention.',
+
+  'how to process overnight shipping': '# Overnight Shipping Process\n\n**Step 1: Confirm eligibility**\nOvernight shipping is available for most medication orders. Check if the patient\'s pharmacy supports expedited shipping.\n\n**Step 2: Use the shipping macro**\nUse the **General CS: Overnight Shipping** macro to provide the patient with shipping details and expectations.\n\n**Step 3: Update the order**\n- Navigate to the patient\'s order in the system\n- Select overnight/expedited shipping option\n- Confirm the updated delivery timeline with the patient\n\n**Step 4: Set expectations**\n- Overnight orders placed before 2 PM ET typically arrive next business day\n- Weekend orders ship Monday\n- Provide tracking information when available\n\n**Key Point:** If there are additional shipping costs, inform the patient before processing.',
+
+  'patient needs a refund': '# Refund Process\n\n**Step 1: Verify the refund request**\nConfirm what the patient is requesting a refund for and review their account history.\n\n**Step 2: Check eligibility**\nReview the refund policy — check if the charge is within the refund window and if the product/service qualifies.\n\n**Step 3: Use the appropriate macro**\n- For standard refunds: Use the **General CS: Refund Request** macro\n- For billing disputes: Use the **Billing: Dispute Resolution** macro\n- If escalation needed: Use the **General CS: Escalation** macro\n\n**Step 4: Process the refund**\n- Document the reason in the patient\'s account\n- Process through the billing system\n- Confirm the refund timeline (typically 5-10 business days)\n\n**Key Point:** Always document the refund reason thoroughly. If it\'s outside standard policy, escalate to a supervisor rather than denying outright.',
+
+  'how to handle a billing dispute': '# Billing Dispute Resolution\n\n**Step 1: Listen and document**\nLet the patient explain the dispute fully. Note the specific charge(s) in question.\n\n**Step 2: Review the account**\nPull up their billing history and verify:\n- What was charged and when\n- Whether they received the service/product\n- Any previous adjustments\n\n**Step 3: Use the appropriate macro**\n- For straightforward disputes: Use the **Billing: Dispute Resolution** macro\n- For subscription billing issues: Use the **Billing: Subscription Adjustment** macro\n- If a refund is warranted: Use the **General CS: Refund Request** macro\n\n**Step 4: Resolve or escalate**\n- If the dispute is valid, process the adjustment immediately\n- If it needs review, escalate with full documentation\n- Always provide a timeline for resolution\n\n**Key Point:** Treat every billing dispute as legitimate until proven otherwise. Patients who feel heard are more likely to stay.',
+
+  'patient asking about lab results': '# Lab Results Inquiry\n\n**Step 1: Verify identity**\nConfirm the patient\'s identity before discussing any lab information.\n\n**Step 2: Check lab status**\nLook up their lab order in the system to determine:\n- Whether labs have been completed\n- If results are in and reviewed by a provider\n- Expected timeline if still pending\n\n**Step 3: Use the appropriate macro**\n- If labs are pending: Use the **Labs: Results Pending** macro\n- If results are ready but need provider review: Use the **Labs: Awaiting Provider Review** macro\n- If the patient needs to schedule labs: Use the **Labs: Schedule Bloodwork** macro\n\n**Step 4: Set expectations**\n- Lab results typically take 3-5 business days\n- Results must be reviewed by a provider before being released\n- Direct patients to the portal for accessing reviewed results\n\n**Key Point:** Never interpret lab results for patients — always direct them to their provider for clinical questions.',
+
+  'escalation process for complaints': '# Escalation Process\n\n**Step 1: De-escalate first**\nAcknowledge the patient\'s frustration. Use empathetic language and show you take their concern seriously.\n\n**Step 2: Attempt resolution**\nTry to resolve the issue at your level first:\n- Review the situation thoroughly\n- Offer concrete solutions\n- Document everything\n\n**Step 3: Use the escalation macro**\nIf the issue can\'t be resolved at your level: Use the **General CS: Escalation** macro to properly route the complaint.\n\n**Step 4: Escalation routing**\n- Clinical complaints → Escalate to the provider or CMO\n- Billing disputes over $100 → Escalate to billing supervisor\n- Service complaints → Escalate to CS supervisor\n- Legal/compliance concerns → Escalate immediately to compliance team\n\n**Step 5: Follow up**\n- Set a follow-up reminder\n- Inform the patient of the expected timeline\n- Document the escalation in the patient\'s account\n\n**Key Point:** Never promise a specific outcome during escalation — promise that it will be reviewed by the appropriate person.'
+};
+
+function getCachedAnswer(query) {
+  var lower = query.toLowerCase().trim();
+  if (CACHED_ANSWERS[lower]) return CACHED_ANSWERS[lower];
+  // Fuzzy match on key phrases
+  for (var key in CACHED_ANSWERS) {
+    if (lower.indexOf(key.substring(0, 20)) !== -1 || key.indexOf(lower.substring(0, 20)) !== -1) {
+      return CACHED_ANSWERS[key];
+    }
+  }
+  return null;
+}
+
+function copyFullResponse(btn) {
+  var tmp = document.createElement('textarea');
+  tmp.innerHTML = btn.getAttribute('data-response');
+  navigator.clipboard.writeText(tmp.value).then(function() {
+    showCopyToast('Full response copied!');
   });
 }
 
