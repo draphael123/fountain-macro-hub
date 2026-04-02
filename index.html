@@ -631,6 +631,303 @@
   .results-section-title:first-child {
     margin-top: 0;
   }
+
+  /* Scenario buttons toolbar (Ask mode) */
+  .scenario-toolbar {
+    display: none;
+    gap: 8px;
+    padding: 12px 0;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-right: 4px;
+    padding-left: 2px;
+  }
+
+  .scenario-toolbar.visible {
+    display: flex;
+  }
+
+  .scenario-btn {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .scenario-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  /* Workflow copy button */
+  .workflow-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 1px solid #a7f3d0;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    font-size: 12.5px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 10px;
+  }
+
+  .workflow-copy-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+
+  .workflow-copy-btn.copied {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+  }
+
+  /* Related macros section */
+  .related-macros-container {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #a7f3d0;
+  }
+
+  .related-macros-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .related-macro-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    transition: all 0.15s;
+  }
+
+  .related-macro-card:hover {
+    box-shadow: var(--shadow-sm);
+    border-color: var(--accent);
+  }
+
+  .related-macro-name {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .related-macro-category {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .related-macro-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: transparent;
+    font-size: 11px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+
+  .related-macro-copy-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  .related-macro-copy-btn.copied {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+  }
+
+  /* Step-through wizard */
+  .workflow-wizard-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 1px solid #a7f3d0;
+    border-radius: var(--radius-sm);
+    background: var(--accent-light);
+    font-size: 12.5px;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s;
+    margin-top: 10px;
+  }
+
+  .workflow-wizard-btn:hover {
+    background: var(--accent);
+    color: var(--surface);
+  }
+
+  .wizard-container {
+    display: none;
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .wizard-container.active {
+    display: block;
+  }
+
+  .wizard-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .wizard-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .wizard-progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.2s;
+  }
+
+  .wizard-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+    border-left: 4px solid var(--accent);
+  }
+
+  .wizard-step-number {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .wizard-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .wizard-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .wizard-btn:hover:not(:disabled) {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  .wizard-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .wizard-btn.active {
+    background: var(--accent);
+    color: var(--surface);
+    border-color: var(--accent);
+  }
+
+  .wizard-macro-suggestions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .wizard-macro-suggestions-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .wizard-suggested-macro {
+    background: var(--bg);
+    border: 1px solid #a7f3d0;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    margin-bottom: 6px;
+  }
+
+  .wizard-suggested-macro-name {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .wizard-suggested-macro-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    border: 1px solid #a7f3d0;
+    border-radius: 3px;
+    background: transparent;
+    font-size: 11px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+
+  .wizard-suggested-macro-copy:hover {
+    background: var(--accent-light);
+  }
+
+  .wizard-suggested-macro-copy.copied {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+  }
 </style>
 </head>
 <body>
@@ -670,6 +967,20 @@
     <button class="mode-btn" data-mode="ask">Ask a Question</button>
   </div>
   <div class="search-help-text" id="searchHelpText">Try: "patient wants to cancel" or "how to process overnight shipping"</div>
+</div>
+
+<div class="scenario-toolbar" id="scenarioToolbar">
+  <button class="scenario-btn" onclick="quickSearchScenario('Cancellation')">🚫 Cancellation</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Shipping Issue')">📦 Shipping Issue</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Billing')">💳 Billing/Payment</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Labs Bloodwork')">🔬 Labs & Bloodwork</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Refill Medication')">💊 Refill/Medication</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('New Signup')">👤 New Signup</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Refund')">💰 Refund Request</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Schedule Visit')">📋 Schedule Visit</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Escalation')">⚠️ Escalation</button>
+  <button class="scenario-btn" onclick="quickSearchScenario('Plan Change')">🔄 Plan Change</button>
+</div>
 
 <div class="preview-tooltip" id="previewTooltip"></div>
 
@@ -819,6 +1130,12 @@ function renderAskResults(query) {
   const { workflows, macros: macroResults } = smartSearch(query);
   const container = document.getElementById('results');
   
+  // Show/hide scenario toolbar
+  const toolbar = document.getElementById('scenarioToolbar');
+  if (toolbar) {
+    toolbar.classList.toggle('visible', query.trim().length === 0);
+  }
+  
   if (workflows.length === 0 && macroResults.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
@@ -837,21 +1154,43 @@ function renderAskResults(query) {
     workflows.forEach(wf => {
       const preview = wf.content.substring(0, 180);
       const hasMore = wf.content.length > 180;
-      html += `
-        <div class="workflow-card" data-wf-id="${wf.id}">
-          <div class="workflow-header">
-            <div class="workflow-icon">📋</div>
-            <div class="workflow-title-wrap">
-              <div class="workflow-title">${escHtml(wf.title)}</div>
-              <div class="workflow-meta">
-                <span class="workflow-category">${wf.category}</span>
-                <span class="workflow-relevance">${getRelevanceLabel(wf.score)}</span>
-              </div>
-            </div>
-          </div>
-          <div class="workflow-preview" data-wf-id="${wf.id}">${escHtml(preview)}${hasMore ? '...' : ''}</div>
-        </div>
-      `;
+      const relatedMacros = findRelatedMacros(wf, 3);
+      const steps = parseWorkflowSteps(wf.content);
+      const hasSteps = steps.length >= 2;
+      const wfContentJSON = JSON.stringify(wf.content);
+      
+      html += '<div class="workflow-card" data-wf-id="' + wf.id + '">';
+      html += '<div class="workflow-header">';
+      html += '<div class="workflow-icon">📋</div>';
+      html += '<div class="workflow-title-wrap">';
+      html += '<div class="workflow-title">' + escHtml(wf.title) + '</div>';
+      html += '<div class="workflow-meta">';
+      html += '<span class="workflow-category">' + wf.category + '</span>';
+      html += '<span class="workflow-relevance">' + getRelevanceLabel(wf.score) + '</span>';
+      html += '</div></div></div>';
+      html += '<div class="workflow-preview" data-wf-id="' + wf.id + '">' + escHtml(preview) + (hasMore ? '...' : '') + '</div>';
+      html += '<div style="margin-top: 10px;">';
+      html += '<button class="workflow-copy-btn" onclick="event.stopPropagation(); copyWorkflow(this, ' + wfContentJSON + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy workflow</button>';
+      if (hasSteps) {
+        html += '<button class="workflow-wizard-btn" onclick="event.stopPropagation(); toggleWizard(this, ' + wfContentJSON + ', ' + wf.id + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 12 19 12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg> Step-by-Step Mode</button>';
+      }
+      html += '</div>';
+      
+      if (relatedMacros.length > 0) {
+        html += '<div class="related-macros-container">';
+        html += '<div class="related-macros-title">💬 Related Macros</div>';
+        relatedMacros.forEach(m => {
+          const mContentJSON = JSON.stringify(m.c);
+          html += '<div class="related-macro-card">';
+          html += '<div class="related-macro-name">' + escHtml(m.n) + '</div>';
+          html += '<div class="related-macro-category">' + escHtml(m.cat) + '</div>';
+          html += '<button class="related-macro-copy-btn" onclick="copyRelatedMacro(this, ' + mContentJSON + ')">📋 Copy</button>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+      
+      html += '</div>';
     });
   }
   
@@ -866,7 +1205,8 @@ function renderAskResults(query) {
   
   // Attach workflow card click handlers
   document.querySelectorAll('.workflow-card').forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('button')) return;
       const wfId = this.dataset.wfId;
       const workflow = WORKFLOW_DB.find(w => w.id == wfId);
       const preview = this.querySelector('.workflow-preview');
@@ -900,9 +1240,13 @@ function setMode(mode) {
   if (mode === 'ask') {
     input.placeholder = 'Ask a question about Fountain workflows...';
     if (helpText) helpText.classList.add('visible');
+    const toolbar = document.getElementById('scenarioToolbar');
+    if (toolbar && !input.value.trim()) toolbar.classList.add('visible');
   } else {
     input.placeholder = 'Search macros...';
     if (helpText) helpText.classList.remove('visible');
+    const toolbar = document.getElementById('scenarioToolbar');
+    if (toolbar) toolbar.classList.remove('visible');
   }
   
   const query = input.value;
@@ -913,7 +1257,12 @@ function setMode(mode) {
       renderResults();
     }
   } else {
-    renderResults();
+    if (mode === 'ask') {
+      const container = document.getElementById('results');
+      container.innerHTML = '<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><h3>Ask a question about Fountain workflows</h3><p>Type a question above or click a scenario below to get started.</p></div>';
+    } else {
+      renderResults();
+    }
   }
 }
 
@@ -1174,6 +1523,308 @@ function copyMacro(btn, text) {
     }, 1500);
   });
 }
+
+
+function quickSearchScenario(scenario) {
+  const input = document.getElementById('searchInput');
+  input.value = scenario;
+  input.dispatchEvent(new Event('input'));
+}
+
+function renderMacroCard(m) {
+  const favClass = isFavorite(m.n) ? ' is-fav' : '';
+  const favIcon = isFavorite(m.n) ? '&#9733;' : '&#9734;';
+  const macroId = 'mc_' + btoa(encodeURIComponent(m.n)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+  const macroName = escHtml(m.n);
+  const macroContent = escHtml(m.c || '(No content)');
+  const actionInfo = m.a && m.a.trim() ? '<span class="macro-actions-info">Actions: ' + escHtml(m.a) + '</span>' : '';
+  
+  let html = '<div class="macro-card" id="' + macroId + '" data-name="' + macroName + '">';
+  html += '<div class="macro-header" onclick="openCard(this.parentElement, ' + JSON.stringify(m.n) + ')">';
+  html += '<div class="macro-expand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
+  html += '<div class="macro-info">';
+  html += '<div class="macro-name">' + macroName + '</div>';
+  html += '<div class="macro-meta">';
+  html += '<span class="macro-category-tag">' + escHtml(m.cat) + '</span>';
+  html += '</div></div>';
+  html += '<button class="fav-btn' + favClass + '" title="' + (isFavorite(m.n) ? 'Remove from favorites' : 'Add to favorites') + '" onclick="event.stopPropagation(); toggleFavorite(' + JSON.stringify(m.n) + ')">' + favIcon + '</button>';
+  html += '</div>';
+  html += '<div class="macro-body">';
+  html += '<div class="macro-content">' + macroContent + '</div>';
+  html += '<div class="macro-actions-bar">';
+  html += '<button class="copy-btn" onclick="event.stopPropagation(); copyMacro(this, ' + JSON.stringify(m.c) + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy content</button>';
+  html += actionInfo;
+  html += '</div></div></div>';
+  
+  return html;
+}
+function attachMacroCardHandlers(card) {
+  card.addEventListener('mouseenter', function() {
+    const content = this.querySelector('.macro-content');
+    if (content) {
+      const preview = (content.textContent || '').substring(0, 500);
+      showPreview({target: this}, JSON.stringify(preview));
+    }
+  });
+  
+  card.addEventListener('mouseleave', hidePreview);
+}
+
+function findRelatedMacros(workflow, maxResults = 3) {
+  const workflowTokens = tokenizeQuery(workflow.title + ' ' + workflow.category + ' ' + workflow.content);
+  const workflowTerms = new Set(workflowTokens);
+  
+  const scored = macros.map(m => {
+    const macroTokens = tokenizeQuery(m.n + ' ' + m.cat + ' ' + m.c);
+    const macroTerms = new Set(macroTokens);
+    
+    // Check for category match
+    let categoryScore = 0;
+    if (m.cat.toLowerCase() === workflow.category.toLowerCase()) {
+      categoryScore = 15;
+    } else if (m.cat.toLowerCase().includes(workflow.category.toLowerCase()) || 
+               workflow.category.toLowerCase().includes(m.cat.toLowerCase())) {
+      categoryScore = 10;
+    }
+    
+    // Check for keyword overlap
+    let overlapCount = 0;
+    for (const term of workflowTerms) {
+      if (term.length > 2 && macroTerms.has(term)) {
+        overlapCount++;
+      }
+    }
+    
+    const keywordScore = overlapCount * 5;
+    const totalScore = categoryScore + keywordScore;
+    
+    return { ...m, score: totalScore };
+  });
+  
+  return scored
+    .filter(m => m.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, maxResults);
+}
+
+function parseWorkflowSteps(content) {
+  if (!content) return [];
+  
+  const lines = content.split(/\n/);
+  const steps = [];
+  let currentStep = '';
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    
+    // Check for numbered steps (1., 2., etc.)
+    const numberedMatch = trimmed.match(/^\d+\.\s+(.+)/);
+    if (numberedMatch) {
+      if (currentStep) steps.push(currentStep.trim());
+      currentStep = trimmed;
+      continue;
+    }
+    
+    // Check for bullet points
+    if (trimmed.match(/^[-•*]\s+/)) {
+      if (currentStep) steps.push(currentStep.trim());
+      currentStep = trimmed;
+      continue;
+    }
+    
+    // Add to current step
+    if (currentStep && trimmed) {
+      currentStep += ' ' + trimmed;
+    } else if (!currentStep && trimmed && trimmed.length > 10) {
+      currentStep = trimmed;
+    }
+  }
+  
+  if (currentStep) steps.push(currentStep.trim());
+  
+  return steps.filter(s => s.length > 5);
+}
+
+function findMacrosForStep(stepContent) {
+  const stepTokens = tokenizeQuery(stepContent);
+  if (stepTokens.length === 0) return null;
+  
+  const scored = macros.map(m => {
+    const macroTokens = tokenizeQuery(m.n + ' ' + m.c);
+    let score = 0;
+    
+    for (const token of stepTokens) {
+      if (token.length > 2) {
+        if (m.n.toLowerCase().includes(token)) score += 5;
+        if (m.c.toLowerCase().includes(token)) score += 2;
+        if (m.cat.toLowerCase().includes(token)) score += 3;
+      }
+    }
+    
+    return { ...m, score };
+  });
+  
+  const result = scored.filter(m => m.score > 0).sort((a, b) => b.score - a.score)[0];
+  return result || null;
+}
+
+function copyWorkflow(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy workflow';
+    }, 1500);
+  });
+}
+
+function copyRelatedMacro(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '✓ Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 Copy';
+    }, 1500);
+  });
+}
+
+function toggleWizard(btn, workflowContent, workflowId) {
+  const card = btn.closest('.workflow-card');
+  let wizard = card.querySelector('.wizard-container');
+  
+  if (wizard && wizard.classList.contains('active')) {
+    wizard.classList.remove('active');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 12 19 12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg> Step-by-Step Mode';
+    return;
+  }
+  
+  if (!wizard) {
+    const steps = parseWorkflowSteps(workflowContent);
+    if (steps.length < 2) {
+      alert('This workflow does not have clear steps to display.');
+      return;
+    }
+    
+    wizard = document.createElement('div');
+    wizard.className = 'wizard-container active';
+    wizard.id = 'wizard_' + workflowId;
+    wizard.innerHTML = renderWizard(steps, workflowId);
+    btn.parentElement.parentElement.appendChild(wizard);
+    
+    attachWizardHandlers(wizard, steps, workflowId);
+  } else {
+    wizard.classList.add('active');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 12 19 12"></polyline><polyline points="12 5 19 12 12 19"></polyline></svg> Hide Steps';
+  }
+}
+
+function renderWizard(steps, workflowId) {
+  let html = '';
+  html += '<div class="wizard-progress">';
+  html += '<span class="wizard-step-counter" id="wiz_' + workflowId + '_counter">Step 1 of ' + steps.length + '</span>';
+  html += '<div class="wizard-progress-bar"><div class="wizard-progress-bar-fill" id="wiz_' + workflowId + '_bar" style="width: 0%"></div></div>';
+  html += '</div>';
+  
+  for (let i = 0; i < steps.length; i++) {
+    const isActive = i === 0 ? ' active' : '';
+    html += '<div class="wizard-step' + isActive + '" id="wiz_' + workflowId + '_step_' + i + '" style="display:' + (i === 0 ? 'block' : 'none') + '">';
+    html += '<div class="wizard-step-number">Step ' + (i + 1) + ' of ' + steps.length + '</div>';
+    html += '<div>' + escHtml(steps[i]) + '</div>';
+    
+    // Find and add matching macro
+    const matchedMacro = findMacrosForStep(steps[i]);
+    if (matchedMacro) {
+      html += '<div class="wizard-macro-suggestions">';
+      html += '<div class="wizard-macro-suggestions-title">Suggested macro for this step</div>';
+      html += '<div class="wizard-suggested-macro">';
+      html += '<div class="wizard-suggested-macro-name">' + escHtml(matchedMacro.n) + '</div>';
+      html += '<button class="wizard-suggested-macro-copy" onclick="copyWizardMacro(this, ' + JSON.stringify(JSON.stringify(matchedMacro.c)) + ')">📋 Copy</button>';
+      html += '</div></div>';
+    }
+    
+    html += '</div>';
+  }
+  
+  html += '<div class="wizard-controls">';
+  html += '<button class="wizard-btn" id="wiz_' + workflowId + '_prev" onclick="wizardNav(' + workflowId + ', -1)" disabled>← Previous</button>';
+  html += '<button class="wizard-btn" id="wiz_' + workflowId + '_next" onclick="wizardNav(' + workflowId + ', 1)">Next →</button>';
+  html += '<button class="wizard-btn" onclick="toggleShowAll(' + workflowId + ')">Show All</button>';
+  html += '</div>';
+  
+  return html;
+}
+
+function attachWizardHandlers(wizard, steps, workflowId) {
+  // Initial setup
+  updateWizardDisplay(steps, workflowId, 0);
+}
+
+function wizardNav(workflowId, direction) {
+  const wizard = document.getElementById('wizard_' + workflowId);
+  if (!wizard) return;
+  
+  const steps = wizard.querySelectorAll('.wizard-step').length;
+  let currentIdx = -1;
+  
+  wizard.querySelectorAll('.wizard-step').forEach((step, i) => {
+    if (step.style.display !== 'none') currentIdx = i;
+  });
+  
+  const newIdx = currentIdx + direction;
+  if (newIdx < 0 || newIdx >= steps) return;
+  
+  updateWizardDisplay(Array(steps), workflowId, newIdx);
+}
+
+function updateWizardDisplay(steps, workflowId, currentIdx) {
+  const wizard = document.getElementById('wizard_' + workflowId);
+  if (!wizard) return;
+  
+  const totalSteps = steps.length;
+  
+  wizard.querySelectorAll('.wizard-step').forEach((step, i) => {
+    step.style.display = i === currentIdx ? 'block' : 'none';
+  });
+  
+  const counter = wizard.querySelector('.wizard-step-counter');
+  if (counter) counter.textContent = 'Step ' + (currentIdx + 1) + ' of ' + totalSteps;
+  
+  const bar = wizard.querySelector('.wizard-progress-bar-fill');
+  if (bar) bar.style.width = ((currentIdx + 1) / totalSteps * 100) + '%';
+  
+  const prevBtn = wizard.querySelector('#wiz_' + workflowId + '_prev');
+  const nextBtn = wizard.querySelector('#wiz_' + workflowId + '_next');
+  if (prevBtn) prevBtn.disabled = currentIdx === 0;
+  if (nextBtn) nextBtn.disabled = currentIdx === totalSteps - 1;
+}
+
+function toggleShowAll(workflowId) {
+  const wizard = document.getElementById('wizard_' + workflowId);
+  if (!wizard) return;
+  
+  const steps = wizard.querySelectorAll('.wizard-step');
+  const allVisible = Array.from(steps).every(s => s.style.display !== 'none');
+  
+  steps.forEach(step => {
+    step.style.display = allVisible ? 'none' : 'block';
+  });
+  
+  wizard.querySelector('.wizard-controls').style.display = allVisible ? 'flex' : 'none';
+}
+
+function copyWizardMacro(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '✓ Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 Copy';
+    }, 1500);
+  });
+}
+
 
 /* ── Sidebar: Favorites ── */
 function renderFavSidebar() {
