@@ -1501,6 +1501,16 @@
   body.chat-mode .search-help-text { display: none !important; }
   body.chat-mode .scenario-toolbar { display: none !important; }
 
+  body.leads-mode .back-to-search { display: inline-flex; }
+  body.leads-mode .search-wrap { display: none; }
+  body.leads-mode .stats { display: none; }
+  body.leads-mode .mode-toggle { display: none; }
+  body.leads-mode .search-help-text { display: none !important; }
+  body.leads-mode .scenario-toolbar { display: none !important; }
+  body.leads-mode .chat-container { display: flex; }
+  body.leads-mode .layout { display: none; }
+  body.leads-mode .sidebar { display: none; }
+
   .ai-answer-card {
     background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
     border: 1.5px solid #c4b5fd;
@@ -1613,6 +1623,7 @@
   <div class="mode-toggle">
     <button class="mode-btn active" data-mode="search">Macro Search</button>
     <button class="mode-btn" data-mode="ask">Ask a Question</button>
+    <button class="mode-btn" data-mode="leads">Lead Response</button>
   </div>
   <button class="back-to-search" onclick="setMode('search')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Macros</button>
   <div class="search-help-text" id="searchHelpText">Try: "patient wants to cancel" or "how to process overnight shipping"</div>
@@ -1865,7 +1876,47 @@ async function callClaudeAI(query, searchResults) {
     .map(m => '- **' + m.n + '** (' + m.cat + '): ' + (m.c || '').substring(0, 300) + ((m.c || '').length > 300 ? '...' : ''))
     .join('\n');
 
-  const systemPrompt = `You are a Fountain Vitality Customer Service assistant. You help CS reps find the right process steps and macros quickly.
+  var systemPrompt;
+  var userMessage;
+
+  if (activeChatMode === 'leads') {
+    systemPrompt = `You are a Fountain Vitality Lead Conversion specialist. You help CS reps craft persuasive, warm, and professional responses to convert prospective patients into Fountain customers.
+
+Fountain Vitality is a telehealth company specializing in:
+- **TRT (Testosterone Replacement Therapy)** for men experiencing low T symptoms
+- **HRT (Hormone Replacement Therapy)** for women, especially menopause/perimenopause
+- **GLP-1 Weight Loss** (semaglutide/tirzepatide) programs
+
+Key selling points to weave in naturally:
+- Board-certified providers who specialize in hormones and weight management
+- Convenient telehealth — no waiting rooms, appointments from home
+- Personalized treatment plans based on lab work
+- Ongoing provider support and monitoring
+- Transparent pricing, no hidden fees
+- FDA-approved medications from licensed US pharmacies
+- Most patients see results within 4-8 weeks
+
+You have access to the following workflows and macros for reference:
+
+**Available Workflows:**
+${workflowContext || 'None found'}
+
+**Available Macros:**
+${macroContext || 'None found'}
+
+When responding:
+1. Draft a READY-TO-SEND response the CS rep can copy and paste directly to the lead
+2. Be warm, empathetic, and confident — not pushy or salesy
+3. Address the lead's specific concern or question head-on
+4. Include a clear call-to-action (book a consultation, schedule labs, etc.)
+5. Keep the response conversational and under 200 words
+6. If relevant, reference specific macros using **bold** names
+7. After the draft response, add a brief "Rep Notes" section with talking points if they call back
+8. Never make medical claims or guarantees about outcomes`;
+
+    userMessage = 'Lead scenario: "' + query + '"\n\nDraft a ready-to-send response to convert this lead, plus brief rep notes.';
+  } else {
+    systemPrompt = `You are a Fountain Vitality Customer Service assistant. You help CS reps find the right process steps and macros quickly.
 
 You have access to the following workflow and macro database:
 
@@ -1884,7 +1935,8 @@ When answering:
 6. If a macro can be used directly, say "Use the **MacroName** macro"
 7. When referencing macros, use their EXACT name from the database so they link correctly`;
 
-  const userMessage = 'CS Question: "' + query + '"\n\nProvide a clear, step-by-step answer referencing specific workflows and macros.';
+    userMessage = 'CS Question: "' + query + '"\n\nProvide a clear, step-by-step answer referencing specific workflows and macros.';
+  }
 
   // Build messages array with conversation history for follow-up context
   var messages = [];
@@ -2029,9 +2081,11 @@ function sendChatMessage() {
   // Add thinking indicator
   const aiMsg = document.createElement('div');
   aiMsg.className = 'chat-message chat-message-ai';
-  aiMsg.innerHTML = '<div class="chat-ai-avatar">&#x1F916;</div>' +
+  var aiAvatar = activeChatMode === 'leads' ? '&#x1F3AF;' : '&#x1F916;';
+  var aiLabel = activeChatMode === 'leads' ? 'Lead Conversion Assistant' : 'Fountain AI Assistant';
+  aiMsg.innerHTML = '<div class="chat-ai-avatar">' + aiAvatar + '</div>' +
     '<div class="chat-ai-body">' +
-    '<div class="chat-ai-label">Fountain AI Assistant</div>' +
+    '<div class="chat-ai-label">' + aiLabel + '</div>' +
     '<div class="chat-ai-content">' +
     '<div class="chat-thinking">' +
     '<div class="chat-thinking-dot"></div>' +
@@ -2136,13 +2190,22 @@ var CACHED_ANSWERS = {
   'escalation process for complaints': '# Escalation Process\n\n**Step 1: De-escalate first**\nAcknowledge the patient\'s frustration. Use empathetic language and show you take their concern seriously.\n\n**Step 2: Attempt resolution**\nTry to resolve the issue at your level first:\n- Review the situation thoroughly\n- Offer concrete solutions\n- Document everything\n\n**Step 3: Use the escalation macro**\nIf the issue can\'t be resolved at your level: Use the **General CS: Escalation** macro to properly route the complaint.\n\n**Step 4: Escalation routing**\n- Clinical complaints → Escalate to the provider or CMO\n- Billing disputes over $100 → Escalate to billing supervisor\n- Service complaints → Escalate to CS supervisor\n- Legal/compliance concerns → Escalate immediately to compliance team\n\n**Step 5: Follow up**\n- Set a follow-up reminder\n- Inform the patient of the expected timeline\n- Document the escalation in the patient\'s account\n\n**Key Point:** Never promise a specific outcome during escalation — promise that it will be reviewed by the appropriate person.'
 };
 
+var LEAD_CACHED_ANSWERS = {
+  'new lead asking about trt pricing and how it works': '# Draft Response\n\nHi there! Thanks so much for reaching out about our TRT program — happy to walk you through everything.\n\nAt Fountain Vitality, we make testosterone replacement therapy simple and convenient. Here\'s how it works:\n\n1. **Quick online consultation** — You\'ll meet with one of our board-certified providers via video from the comfort of home\n2. **Lab work** — We\'ll order comprehensive bloodwork to check your hormone levels (we can send you to a local lab or use at-home kits)\n3. **Personalized plan** — Your provider reviews your labs and creates a treatment plan tailored specifically to you\n4. **Medication delivered** — FDA-approved medications shipped right to your door from a licensed US pharmacy\n\nOur pricing is transparent with no hidden fees. Most patients start noticing improvements in energy, mood, and overall well-being within 4-8 weeks.\n\nWould you like to book a free consultation to get started? I can get you on the calendar this week!\n\n---\n**Rep Notes:**\n- If they ask for specific pricing, provide current plan rates\n- Emphasize convenience of telehealth vs. in-office visits\n- If they mention symptoms (fatigue, low libido, brain fog), validate and connect to TRT benefits\n- Push toward booking the initial consultation as the next step',
+
+  'lead interested in glp-1 weight loss but worried about side effects': '# Draft Response\n\nI totally understand the concern — it\'s smart to do your research before starting any new treatment. Let me put your mind at ease about our GLP-1 program.\n\nAt Fountain Vitality, your safety is our top priority. Here\'s what makes our approach different:\n\n- **Board-certified providers** who specialize in weight management monitor your progress throughout treatment\n- **We start low and go slow** — your dose is gradually adjusted based on how your body responds\n- **Ongoing check-ins** so we can address any side effects quickly if they come up\n- Most patients experience only mild, temporary effects (like slight nausea) that typically resolve within the first 1-2 weeks\n\nOur patients are seeing incredible results — many lose 15-20% of their body weight with the right protocol and support.\n\nThe best next step would be a consultation with one of our providers who can review your health history and answer all your questions. No pressure, just information. Would you like me to set that up?\n\n---\n**Rep Notes:**\n- Never minimize side effects — acknowledge and redirect to provider oversight\n- If they mention specific side effects they\'ve read about, note them for the provider\n- Emphasize the personalized dosing approach\n- Common objection: "I heard people gain it back" → Mention our maintenance protocols',
+
+  'lead comparing us to a local clinic, wants to know why telehealth is better': '# Draft Response\n\nGreat question — and honestly, I love when people compare options because it shows you\'re serious about finding the right fit.\n\nHere\'s what our patients tell us they love about Fountain Vitality compared to traditional clinics:\n\n- **No waiting rooms or drive time** — consult with your provider from your couch, office, or anywhere\n- **Flexible scheduling** — evening and weekend appointments available\n- **Specialized providers** — our doctors and NPs focus specifically on hormone therapy and weight management, not general practice\n- **Consistent care** — you work with the same provider who knows your history\n- **Medications shipped to your door** — no pharmacy trips\n- **Ongoing support** — message your care team anytime between visits\n\nMany of our patients actually switched from local clinics because they wanted more personalized attention and the convenience of telehealth.\n\nI\'d love to get you scheduled for an initial consultation so you can experience the difference firsthand. It\'s quick and easy — would you like me to find a time that works?\n\n---\n**Rep Notes:**\n- Don\'t badmouth the competitor — focus on Fountain\'s strengths\n- If they mention a specific clinic, acknowledge it positively ("they have a good reputation")\n- Key differentiator: specialization vs. general practice\n- If cost is a factor, mention transparent pricing with no surprise fees'
+};
+
 function getCachedAnswer(query) {
   var lower = query.toLowerCase().trim();
-  if (CACHED_ANSWERS[lower]) return CACHED_ANSWERS[lower];
+  var cache = activeChatMode === 'leads' ? LEAD_CACHED_ANSWERS : CACHED_ANSWERS;
+  if (cache[lower]) return cache[lower];
   // Fuzzy match on key phrases
-  for (var key in CACHED_ANSWERS) {
+  for (var key in cache) {
     if (lower.indexOf(key.substring(0, 20)) !== -1 || key.indexOf(lower.substring(0, 20)) !== -1) {
-      return CACHED_ANSWERS[key];
+      return cache[key];
     }
   }
   return null;
@@ -2198,6 +2261,8 @@ function renderAskResults(query, triggerAI = false) {
 }
 
 
+var activeChatMode = 'ask'; // 'ask' or 'leads'
+
 function setMode(mode) {
   currentMode = mode;
   const input = document.getElementById('searchInput');
@@ -2207,16 +2272,118 @@ function setMode(mode) {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
 
-  if (mode === 'ask') {
-    document.body.classList.add('chat-mode');
-    setTimeout(function() { document.getElementById('chatInput').focus(); }, 100);
+  if (mode === 'ask' || mode === 'leads') {
+    activeChatMode = mode;
+    document.body.classList.remove('chat-mode', 'leads-mode');
+    document.body.classList.add(mode === 'leads' ? 'leads-mode' : 'chat-mode');
+
+    // Reset chat for mode switch
+    chatHistory = [];
+    var historyEl = document.getElementById('chatHistory');
+    var welcome = document.getElementById('chatWelcome');
+    // Remove all messages except welcome
+    Array.from(historyEl.children).forEach(function(child) {
+      if (child !== welcome) historyEl.removeChild(child);
+    });
+    if (welcome) welcome.style.display = '';
+
+    // Update welcome content based on mode
+    updateWelcomeForMode(mode);
+
+    var chatInput = document.getElementById('chatInput');
+    chatInput.placeholder = mode === 'leads'
+      ? 'Describe the lead situation or paste their message...'
+      : 'Ask a question about Fountain workflows...';
+
+    // Update AI label
+    var poweredBy = document.querySelector('.chat-powered-by');
+    if (poweredBy) {
+      poweredBy.innerHTML = mode === 'leads'
+        ? 'Lead Conversion Mode &middot; Powered by Claude'
+        : 'Powered by Claude &middot; Searches 550 workflows &amp; 1,156 macros';
+    }
+
+    setTimeout(function() { chatInput.focus(); }, 100);
   } else {
-    document.body.classList.remove('chat-mode');
+    document.body.classList.remove('chat-mode', 'leads-mode');
     input.placeholder = 'Search macros by name or content... (Ctrl+K)';
     if (helpText) helpText.classList.remove('visible');
     const toolbar = document.getElementById('scenarioToolbar');
     if (toolbar) toolbar.classList.remove('visible');
     renderResults();
+  }
+}
+
+function updateWelcomeForMode(mode) {
+  var welcome = document.getElementById('chatWelcome');
+  if (!welcome) return;
+
+  if (mode === 'leads') {
+    welcome.innerHTML =
+      '<div class="chat-welcome-icon" style="background:linear-gradient(135deg,#059669,#10b981);">' +
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>' +
+      '</div>' +
+      '<h2>Lead Conversion Assistant</h2>' +
+      '<p>Get persuasive, on-brand responses to convert leads into Fountain patients. Paste their message or describe the scenario.</p>' +
+      '<div class="chat-suggestions">' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'New lead asking about TRT pricing and how it works\')">' +
+          '<span class="suggestion-emoji">&#x1F4B5;</span>' +
+          '<span>Lead asking about TRT pricing</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead interested in GLP-1 weight loss but worried about side effects\')">' +
+          '<span class="suggestion-emoji">&#x1F48A;</span>' +
+          '<span>GLP-1 lead worried about side effects</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead comparing us to a local clinic, wants to know why telehealth is better\')">' +
+          '<span class="suggestion-emoji">&#x1F3E5;</span>' +
+          '<span>Lead comparing us to local clinic</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead went cold after initial inquiry two weeks ago, need a follow-up message\')">' +
+          '<span class="suggestion-emoji">&#x1F4E9;</span>' +
+          '<span>Re-engage a cold lead</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead asking about HRT for menopause symptoms, seems hesitant\')">' +
+          '<span class="suggestion-emoji">&#x1F33F;</span>' +
+          '<span>Hesitant HRT lead</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead wants to know what labs are required before starting treatment\')">' +
+          '<span class="suggestion-emoji">&#x1F9EA;</span>' +
+          '<span>Lead asking about lab requirements</span>' +
+        '</button>' +
+      '</div>';
+  } else {
+    welcome.innerHTML =
+      '<div class="chat-welcome-icon">' +
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>' +
+      '</div>' +
+      '<h2>Ask about Fountain workflows</h2>' +
+      '<p>Get instant answers about processes, macros, and CS workflows. Powered by AI with access to all 550+ workflows and 1,156 macros.</p>' +
+      '<div class="chat-suggestions">' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Patient wants to cancel their subscription\')">' +
+          '<span class="suggestion-emoji">&#x1F6AB;</span>' +
+          '<span>Patient wants to cancel their subscription</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'How to process overnight shipping\')">' +
+          '<span class="suggestion-emoji">&#x1F4E6;</span>' +
+          '<span>How to process overnight shipping</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Patient needs a refund\')">' +
+          '<span class="suggestion-emoji">&#x1F4B0;</span>' +
+          '<span>Patient needs a refund</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'How to handle a billing dispute\')">' +
+          '<span class="suggestion-emoji">&#x1F4B3;</span>' +
+          '<span>How to handle a billing dispute</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Patient asking about lab results\')">' +
+          '<span class="suggestion-emoji">&#x1F52C;</span>' +
+          '<span>Patient asking about lab results</span>' +
+        '</button>' +
+        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Escalation process for complaints\')">' +
+          '<span class="suggestion-emoji">&#x26A0;&#xFE0F;</span>' +
+          '<span>Escalation process for complaints</span>' +
+        '</button>' +
+      '</div>';
   }
 }
 
