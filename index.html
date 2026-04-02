@@ -76,7 +76,8 @@
     padding: 12px 24px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 12px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -512,9 +513,10 @@
     font-size: 12px;
     color: var(--text-muted);
     font-style: italic;
-    margin-top: 8px;
+    margin-top: 2px;
     display: none;
     margin-left: 2px;
+    flex-basis: 100%;
   }
 
   .search-help-text.visible {
@@ -1306,7 +1308,7 @@ function renderAIAnswerCard(content) {
   return html;
 }
 
-function renderAskResults(query) {
+function renderAskResults(query, triggerAI = false) {
   const { workflows, macros: macroResults } = smartSearch(query);
   const container = document.getElementById('results');
   
@@ -1412,7 +1414,8 @@ function renderAskResults(query) {
     attachMacroCardHandlers(card);
   });
   
-  // Call Claude API in background
+  // Call Claude API in background (only when triggered by Enter or scenario click)
+  if (!triggerAI) return;
   callClaudeAI(query, { workflows, macros: macroResults }).then(aiResponse => {
     if (aiResponse) {
       const aiCard = container.querySelector('.ai-answer-card');
@@ -1538,8 +1541,9 @@ document.getElementById('searchInput').addEventListener('input', function() {
 document.getElementById('searchInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && currentMode === 'ask') {
     e.preventDefault();
+    clearTimeout(debounceTimer);
     searchQuery = this.value.trim();
-    renderAskResults(this.value.trim());
+    renderAskResults(this.value.trim(), true);
   }
 });
 
@@ -1735,7 +1739,8 @@ function copyMacro(btn, text) {
 function quickSearchScenario(scenario) {
   const input = document.getElementById('searchInput');
   input.value = scenario;
-  input.dispatchEvent(new Event('input'));
+  searchQuery = scenario.toLowerCase();
+  renderAskResults(scenario, true);
 }
 
 function renderMacroCard(m) {
