@@ -2103,8 +2103,8 @@ function sendChatMessage() {
   // Run keyword search for context
   const searchResults = smartSearch(query);
 
-  // Check pre-cached answers first
-  var cachedAnswer = getCachedAnswer(query);
+  // Check pre-cached answers first (skip in leads mode — always use AI)
+  var cachedAnswer = activeChatMode === 'leads' ? null : getCachedAnswer(query);
 
   function renderResponse(aiResponse) {
     var contentEl = aiMsg.querySelector('.chat-ai-content');
