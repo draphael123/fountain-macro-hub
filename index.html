@@ -475,6 +475,291 @@
     gap: 10px;
   }
 
+  /* Export dropdown */
+  .export-dropdown {
+    position: relative;
+  }
+  .export-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .export-btn:hover { background: var(--surface-hover); color: var(--text); }
+  .export-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    z-index: 50;
+    min-width: 120px;
+    overflow: hidden;
+  }
+  .export-menu.visible { display: block; }
+  .export-menu-item {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .export-menu-item:hover { background: var(--surface-hover); }
+
+  /* Keyboard shortcuts modal */
+  .shortcuts-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .shortcuts-modal-overlay.visible { display: flex; }
+  .shortcuts-modal {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 420px;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.2s ease-out;
+  }
+  @keyframes modalSlideIn {
+    from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .shortcuts-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .shortcuts-modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  .shortcuts-modal-close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--category-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 18px;
+  }
+  .shortcuts-modal-close:hover { background: var(--border); }
+  .shortcuts-modal-body { padding: 16px 20px; }
+  .shortcut-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .shortcut-row:last-child { border-bottom: none; }
+  .shortcut-label { font-size: 14px; color: var(--text); }
+  .shortcut-keys {
+    display: flex;
+    gap: 4px;
+  }
+  .shortcut-key {
+    padding: 4px 8px;
+    background: var(--category-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Expand/collapse all button */
+  .expand-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .expand-all-btn:hover { background: var(--surface-hover); color: var(--text); }
+  .expand-all-btn svg { transition: transform 0.2s; }
+  .expand-all-btn.expanded svg { transform: rotate(180deg); }
+
+  /* Pin button */
+  .pin-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0.6;
+  }
+  .pin-btn:hover { color: var(--accent); opacity: 1; transform: scale(1.15); }
+  .pin-btn.is-pinned { color: var(--accent); opacity: 1; }
+  .macro-card.pinned {
+    border-left-color: var(--accent);
+    background: var(--accent-lighter);
+  }
+  .pinned-indicator {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+
+  /* Variable fill modal */
+  .varfill-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .varfill-modal-overlay.visible { display: flex; }
+  .varfill-modal {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.2s ease-out;
+  }
+  .varfill-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .varfill-modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  .varfill-modal-close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--category-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 18px;
+  }
+  .varfill-modal-close:hover { background: var(--border); }
+  .varfill-modal-body { padding: 16px 20px; }
+  .varfill-field {
+    margin-bottom: 14px;
+  }
+  .varfill-field:last-child { margin-bottom: 0; }
+  .varfill-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .varfill-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: all 0.15s;
+  }
+  .varfill-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+  .varfill-modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .varfill-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .varfill-btn-secondary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .varfill-btn-secondary:hover { background: var(--surface-hover); }
+  .varfill-btn-primary {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: white;
+  }
+  .varfill-btn-primary:hover { background: var(--accent-dark); }
+  .fill-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--accent-lighter);
+    font-size: 12px;
+    color: var(--accent-dark);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fill-copy-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+
   .sort-select {
     padding: 5px 10px;
     border: 1px solid var(--border);
@@ -1760,10 +2045,33 @@
   /* Thinking animation */
   .chat-thinking {
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 4px 0;
+  }
+
+  .chat-skeleton-line {
+    height: 14px;
+    background: linear-gradient(90deg, var(--category-bg) 25%, var(--border) 50%, var(--category-bg) 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: skeletonShimmer 1.5s infinite;
+  }
+  .chat-skeleton-line:nth-child(1) { width: 90%; }
+  .chat-skeleton-line:nth-child(2) { width: 75%; }
+  .chat-skeleton-line:nth-child(3) { width: 60%; }
+
+  @keyframes skeletonShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Legacy thinking dots (kept for reference) */
+  .chat-thinking-dots {
+    display: flex;
     gap: 4px;
     padding: 12px 16px;
   }
-
   .chat-thinking-dot {
     width: 8px;
     height: 8px;
@@ -1771,7 +2079,6 @@
     border-radius: 50%;
     animation: chatThinkingBounce 1.4s infinite ease-in-out;
   }
-
   .chat-thinking-dot:nth-child(1) { animation-delay: -0.32s; }
   .chat-thinking-dot:nth-child(2) { animation-delay: -0.16s; }
   .chat-thinking-dot:nth-child(3) { animation-delay: 0s; }
@@ -1779,6 +2086,106 @@
   @keyframes chatThinkingBounce {
     0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
     40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Confidence indicator */
+  .confidence-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .confidence-high {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+  }
+  .confidence-medium {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+  }
+  .confidence-low {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+  .confidence-icon {
+    font-size: 12px;
+  }
+
+  /* Feedback buttons */
+  .feedback-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.15s;
+    opacity: 0.7;
+  }
+  .feedback-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  .feedback-btn.active {
+    opacity: 1;
+  }
+  .feedback-btn.thumbs-up.active {
+    background: #dcfce7;
+    border-color: #86efac;
+  }
+  .feedback-btn.thumbs-down.active {
+    background: #fee2e2;
+    border-color: #fca5a5;
+  }
+  .feedback-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 8px;
+  }
+
+  /* Suggested follow-ups */
+  .followup-section {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .followup-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .followup-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .followup-btn {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .followup-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent-dark);
   }
 
   /* Source cards below AI response */
@@ -2071,6 +2478,60 @@
   body.leads-mode .layout { display: none; }
   body.leads-mode .sidebar { display: none; }
 
+  /* Mode visual differentiation */
+  .mode-banner {
+    display: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+  }
+  body.chat-mode .mode-banner,
+  body.leads-mode .mode-banner { display: block; }
+  body.chat-mode .mode-banner {
+    background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  }
+  body.leads-mode .mode-banner {
+    background: linear-gradient(90deg, #059669, #34d399);
+  }
+
+  /* Leads mode - different chat styling */
+  body.leads-mode .chat-ai-avatar {
+    background: linear-gradient(135deg, #059669, #34d399);
+  }
+  body.leads-mode .chat-ai-label {
+    color: #059669;
+  }
+  body.leads-mode .chat-ai-content strong {
+    color: #059669;
+  }
+  body.leads-mode .chat-message-user .chat-bubble {
+    background: #059669;
+    border-radius: 16px 16px 4px 16px;
+  }
+  body.leads-mode .chat-send-btn {
+    background: #059669;
+  }
+  body.leads-mode .chat-send-btn:hover {
+    background: #047857;
+  }
+  body.leads-mode .chat-input-field:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  }
+
+  /* Ask mode - purple theme (already default, just making explicit) */
+  body.chat-mode .chat-ai-avatar {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  }
+  body.chat-mode .chat-ai-label {
+    color: #7c3aed;
+  }
+  body.chat-mode .chat-ai-content strong {
+    color: #7c3aed;
+  }
+
   /* Persistent tab bar — always visible in chat/leads mode */
   body.chat-mode .mode-toggle,
   body.leads-mode .mode-toggle {
@@ -2161,6 +2622,61 @@
     margin-bottom: 12px;
   }
 
+  /* Print stylesheet */
+  @media print {
+    /* Hide non-essential elements */
+    .topbar, .sidebar, .chat-input-bar, .scroll-to-top, .bulk-mode-bar,
+    .auth-overlay, .mobile-menu-btn, .sidebar-overlay, .preview-tooltip,
+    .fav-btn, .quick-copy-btn, .copy-btn, .macro-actions-bar,
+    .results-actions, .mode-toggle, .search-wrap, .stats,
+    .chat-container, .skip-link { display: none !important; }
+
+    /* Reset layout */
+    body { background: white !important; color: black !important; }
+    .layout { display: block; max-width: 100%; }
+    .main { max-height: none; overflow: visible; padding: 0; }
+
+    /* Expand all macro cards */
+    .macro-card {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin-bottom: 16px;
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+    }
+    .macro-body { display: block !important; }
+    .macro-expand-icon { display: none; }
+    .macro-content {
+      max-height: none !important;
+      overflow: visible !important;
+      background: #f9f9f9 !important;
+    }
+
+    /* Clean typography */
+    .macro-name { font-size: 14pt; }
+    .macro-category-tag {
+      border: 1px solid #999;
+      background: transparent !important;
+      color: black !important;
+    }
+    .var-highlight {
+      background: #eee !important;
+      border: 1px solid #999 !important;
+      color: black !important;
+    }
+
+    /* Page header */
+    .main::before {
+      content: "Fountain Macros Reference";
+      display: block;
+      font-size: 18pt;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid black;
+    }
+  }
+
   </style>
 </head>
 <body>
@@ -2215,6 +2731,10 @@
   <button class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#x1F319;</button>
   <div class="search-help-text" id="searchHelpText">Try: "patient wants to cancel" or "how to process overnight shipping"</div>
   <div class="topbar-mode-indicator" id="topbarModeIndicator"></div>
+</nav>
+
+<div class="mode-banner" id="modeBanner">
+  <span id="modeBannerText">Ask Mode - Get guidance from 550+ workflows</span>
 </div>
 
 <div class="scenario-toolbar" id="scenarioToolbar">
@@ -2309,6 +2829,55 @@
   </div>
 </div>
 
+<div class="shortcuts-modal-overlay" id="shortcutsModal" onclick="closeShortcutsModal(event)">
+  <div class="shortcuts-modal" onclick="event.stopPropagation()">
+    <div class="shortcuts-modal-header">
+      <h3>Keyboard Shortcuts</h3>
+      <button class="shortcuts-modal-close" onclick="closeShortcutsModal()">&times;</button>
+    </div>
+    <div class="shortcuts-modal-body">
+      <div class="shortcut-row">
+        <span class="shortcut-label">Focus search</span>
+        <div class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span class="shortcut-key">K</span></div>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Clear search / Close modal</span>
+        <div class="shortcut-keys"><span class="shortcut-key">Esc</span></div>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Navigate results</span>
+        <div class="shortcut-keys"><span class="shortcut-key">&uarr;</span><span class="shortcut-key">&darr;</span></div>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Expand focused card</span>
+        <div class="shortcut-keys"><span class="shortcut-key">Enter</span></div>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Toggle dark mode</span>
+        <div class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span class="shortcut-key">D</span></div>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Show this help</span>
+        <div class="shortcut-keys"><span class="shortcut-key">?</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="varfill-modal-overlay" id="varfillModal" onclick="closeVarfillModal(event)">
+  <div class="varfill-modal" onclick="event.stopPropagation()">
+    <div class="varfill-modal-header">
+      <h3>Fill Variables</h3>
+      <button class="varfill-modal-close" onclick="closeVarfillModal()">&times;</button>
+    </div>
+    <div class="varfill-modal-body" id="varfillFields"></div>
+    <div class="varfill-modal-footer">
+      <button class="varfill-btn varfill-btn-secondary" onclick="closeVarfillModal()">Cancel</button>
+      <button class="varfill-btn varfill-btn-primary" onclick="fillAndCopy()">Fill & Copy</button>
+    </div>
+  </div>
+</div>
+
 <div class="layout">
   <aside class="sidebar" id="sidebar" role="complementary" aria-label="Categories and filters">
     <button class="sidebar-mobile-close" onclick="toggleMobileSidebar()" aria-label="Close menu">&times;</button>
@@ -2334,11 +2903,25 @@
     <div class="results-header">
       <div class="results-count" id="resultsCount" aria-live="polite" aria-atomic="true"></div>
       <div class="results-actions">
+        <button class="expand-all-btn" id="expandAllBtn" onclick="toggleExpandAll()" aria-label="Expand or collapse all macros">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          <span id="expandAllText">Expand All</span>
+        </button>
         <select class="sort-select" id="sortSelect" onchange="renderResults()">
           <option value="relevance">Sort: Relevance</option>
           <option value="name">Sort: Name A-Z</option>
           <option value="favorites">Sort: Favorites First</option>
         </select>
+        <div class="export-dropdown">
+          <button class="export-btn" onclick="toggleExportMenu()" aria-label="Export options">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <div class="export-menu" id="exportMenu">
+            <button class="export-menu-item" onclick="exportToCSV()">Export as CSV</button>
+            <button class="export-menu-item" onclick="exportToJSON()">Export as JSON</button>
+          </div>
+        </div>
       </div>
     </div>
     <div id="results"></div>
@@ -2428,6 +3011,246 @@ function updateSearchClearButton() {
     clearBtn.classList.remove('visible');
   }
 }
+
+// Export functions
+function toggleExportMenu() {
+  var menu = document.getElementById('exportMenu');
+  menu.classList.toggle('visible');
+
+  // Close menu when clicking outside
+  if (menu.classList.contains('visible')) {
+    setTimeout(function() {
+      document.addEventListener('click', closeExportMenuOnClickOutside);
+    }, 0);
+  }
+}
+
+function closeExportMenuOnClickOutside(e) {
+  var dropdown = document.querySelector('.export-dropdown');
+  if (!dropdown.contains(e.target)) {
+    document.getElementById('exportMenu').classList.remove('visible');
+    document.removeEventListener('click', closeExportMenuOnClickOutside);
+  }
+}
+
+function getFilteredMacrosForExport() {
+  var filtered = macros;
+  if (activeCategory !== 'all') {
+    filtered = filtered.filter(function(m) { return m.cat === activeCategory; });
+  }
+  if (searchQuery) {
+    var terms = searchQuery.toLowerCase().split(/\s+/);
+    filtered = filtered.filter(function(m) {
+      var text = (m.n + ' ' + m.c + ' ' + (m.a || '')).toLowerCase();
+      return terms.every(function(t) { return text.includes(t); });
+    });
+  }
+  return filtered;
+}
+
+function exportToCSV() {
+  var filtered = getFilteredMacrosForExport();
+  if (filtered.length === 0) {
+    alert('No macros to export');
+    return;
+  }
+
+  var csv = 'Name,Category,Content\n';
+  filtered.forEach(function(m) {
+    var name = '"' + (m.n || '').replace(/"/g, '""') + '"';
+    var cat = '"' + (m.cat || '').replace(/"/g, '""') + '"';
+    var content = '"' + (m.c || '').replace(/"/g, '""') + '"';
+    csv += name + ',' + cat + ',' + content + '\n';
+  });
+
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'fountain-macros-' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+
+  document.getElementById('exportMenu').classList.remove('visible');
+}
+
+function exportToJSON() {
+  var filtered = getFilteredMacrosForExport();
+  if (filtered.length === 0) {
+    alert('No macros to export');
+    return;
+  }
+
+  var data = filtered.map(function(m) {
+    return { name: m.n, category: m.cat, content: m.c, actions: m.a || null };
+  });
+
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'fountain-macros-' + new Date().toISOString().slice(0,10) + '.json';
+  link.click();
+
+  document.getElementById('exportMenu').classList.remove('visible');
+}
+
+// Expand/collapse all
+var allExpanded = false;
+
+function toggleExpandAll() {
+  allExpanded = !allExpanded;
+  var cards = document.querySelectorAll('.macro-card');
+  var btn = document.getElementById('expandAllBtn');
+  var text = document.getElementById('expandAllText');
+
+  cards.forEach(function(card) {
+    if (allExpanded) {
+      card.classList.add('open');
+    } else {
+      card.classList.remove('open');
+    }
+  });
+
+  if (allExpanded) {
+    btn.classList.add('expanded');
+    text.textContent = 'Collapse All';
+  } else {
+    btn.classList.remove('expanded');
+    text.textContent = 'Expand All';
+  }
+}
+
+// Reset expand state when results change
+function resetExpandAllState() {
+  allExpanded = false;
+  var btn = document.getElementById('expandAllBtn');
+  var text = document.getElementById('expandAllText');
+  if (btn) btn.classList.remove('expanded');
+  if (text) text.textContent = 'Expand All';
+}
+
+// Variable fill modal
+var currentVarfillContent = '';
+var currentVarfillVariables = [];
+
+function extractVariables(content) {
+  var vars = [];
+  var seen = new Set();
+
+  // Match {{variable}}, {variable}, and [VARIABLE]
+  var patterns = [
+    /\{\{([^}]+)\}\}/g,  // {{var}}
+    /\{([^{}]+)\}/g,     // {var}
+    /\[([A-Z_]+)\]/g,    // [VAR]
+    /\[([a-z][a-z_-]*)\]/gi  // [patient], [date], etc.
+  ];
+
+  patterns.forEach(function(pattern) {
+    var match;
+    while ((match = pattern.exec(content)) !== null) {
+      var varName = match[0];
+      var displayName = match[1];
+      if (!seen.has(varName)) {
+        seen.add(varName);
+        vars.push({ full: varName, display: displayName });
+      }
+    }
+  });
+
+  return vars;
+}
+
+function hasVariables(content) {
+  return extractVariables(content).length > 0;
+}
+
+function openVarfillModal(content) {
+  currentVarfillContent = content;
+  currentVarfillVariables = extractVariables(content);
+
+  var fieldsHtml = '';
+  currentVarfillVariables.forEach(function(v, i) {
+    fieldsHtml += '<div class="varfill-field">';
+    fieldsHtml += '<label class="varfill-label">' + escHtml(v.display) + '</label>';
+    fieldsHtml += '<input type="text" class="varfill-input" id="varfill_' + i + '" placeholder="Enter value for ' + escHtml(v.display) + '">';
+    fieldsHtml += '</div>';
+  });
+
+  document.getElementById('varfillFields').innerHTML = fieldsHtml;
+  document.getElementById('varfillModal').classList.add('visible');
+
+  // Focus first input
+  var firstInput = document.getElementById('varfill_0');
+  if (firstInput) firstInput.focus();
+}
+
+function closeVarfillModal(e) {
+  if (!e || e.target === e.currentTarget) {
+    document.getElementById('varfillModal').classList.remove('visible');
+    currentVarfillContent = '';
+    currentVarfillVariables = [];
+  }
+}
+
+function fillAndCopy() {
+  var filled = currentVarfillContent;
+
+  currentVarfillVariables.forEach(function(v, i) {
+    var input = document.getElementById('varfill_' + i);
+    var value = input ? input.value : '';
+    // Replace all occurrences of the variable
+    filled = filled.split(v.full).join(value);
+  });
+
+  navigator.clipboard.writeText(filled).then(function() {
+    closeVarfillModal();
+    // Show brief success toast
+    var toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#166534;color:white;padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;animation:fadeIn 0.2s;';
+    toast.textContent = 'Copied with filled variables!';
+    document.body.appendChild(toast);
+    setTimeout(function() { toast.remove(); }, 2000);
+  });
+}
+
+// Keyboard shortcuts modal
+function openShortcutsModal() {
+  document.getElementById('shortcutsModal').classList.add('visible');
+}
+
+function closeShortcutsModal(e) {
+  if (!e || e.target === e.currentTarget) {
+    document.getElementById('shortcutsModal').classList.remove('visible');
+  }
+}
+
+// Global keyboard shortcut handler
+document.addEventListener('keydown', function(e) {
+  var activeEl = document.activeElement;
+  var isInput = activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable;
+
+  // ? to show shortcuts (only when not in input)
+  if (e.key === '?' && !isInput) {
+    e.preventDefault();
+    openShortcutsModal();
+    return;
+  }
+
+  // Escape to close modals or clear search
+  if (e.key === 'Escape') {
+    var shortcutsModal = document.getElementById('shortcutsModal');
+    if (shortcutsModal.classList.contains('visible')) {
+      closeShortcutsModal();
+      return;
+    }
+  }
+
+  // Ctrl+D to toggle dark mode
+  if (e.ctrlKey && e.key === 'd') {
+    e.preventDefault();
+    var darkBtn = document.getElementById('darkModeBtn');
+    if (darkBtn) darkBtn.click();
+  }
+});
 
 // Scroll to top
 function scrollToTop() {
@@ -2915,9 +3738,9 @@ function sendChatMessage() {
     '<div class="chat-ai-label">' + aiLabel + '</div>' +
     '<div class="chat-ai-content">' +
     '<div class="chat-thinking">' +
-    '<div class="chat-thinking-dot"></div>' +
-    '<div class="chat-thinking-dot"></div>' +
-    '<div class="chat-thinking-dot"></div>' +
+    '<div class="chat-skeleton-line"></div>' +
+    '<div class="chat-skeleton-line"></div>' +
+    '<div class="chat-skeleton-line"></div>' +
     '</div></div></div>';
   history.appendChild(aiMsg);
 
@@ -2944,12 +3767,40 @@ function sendChatMessage() {
       var html = simpleMarkdown(aiResponse);
       html = linkifyMacros(html);
 
-      // Copy full response button
+      // Add confidence indicator
+      var topWorkflowScore = searchResults.workflows[0]?.score || 0;
+      var topMacroScore = searchResults.macros[0]?.score || 0;
+      var topScore = Math.max(topWorkflowScore, topMacroScore);
+      var matchCount = searchResults.workflows.length + searchResults.macros.length;
+      var confidenceClass, confidenceIcon, confidenceText;
+
+      if (topScore >= 20) {
+        confidenceClass = 'confidence-high';
+        confidenceIcon = '&#x2705;';
+        confidenceText = 'High confidence - ' + matchCount + ' relevant matches found';
+      } else if (topScore >= 10) {
+        confidenceClass = 'confidence-medium';
+        confidenceIcon = '&#x26A0;';
+        confidenceText = 'Medium confidence - ' + matchCount + ' partial matches';
+      } else {
+        confidenceClass = 'confidence-low';
+        confidenceIcon = '&#x2139;';
+        confidenceText = 'Low confidence - verify with documentation';
+      }
+
+      html = '<div class="confidence-badge ' + confidenceClass + '"><span class="confidence-icon">' + confidenceIcon + '</span>' + confidenceText + '</div>' + html;
+
+      // Copy full response button and feedback
       var safeResponse = aiResponse.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-      html += '<div style="margin-top:12px; display:flex; gap:8px; align-items:center;">';
+      var feedbackId = 'fb_' + Date.now();
+      html += '<div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">';
       html += '<button onclick="copyFullResponse(this)" data-response="' + safeResponse + '" style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background=\'var(--accent-light)\'" onmouseout="this.style.background=\'var(--surface)\'">';
       html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
-      html += ' Copy response</button></div>';
+      html += ' Copy response</button>';
+      html += '<span class="feedback-label">Was this helpful?</span>';
+      html += '<button class="feedback-btn thumbs-up" onclick="submitFeedback(\'' + feedbackId + '\', \'up\', this)" title="Helpful">&#x1F44D;</button>';
+      html += '<button class="feedback-btn thumbs-down" onclick="submitFeedback(\'' + feedbackId + '\', \'down\', this)" title="Not helpful">&#x1F44E;</button>';
+      html += '</div>';
 
       // Add source chips — auto-expanded
       var sources = [];
@@ -2974,6 +3825,19 @@ function sendChatMessage() {
           html += '<span class="source-name">' + escHtml(s.name) + '</span>';
           html += '<span class="source-type">' + s.type + '</span>';
           html += '</div>';
+        });
+        html += '</div></div>';
+      }
+
+      // Add suggested follow-ups
+      var followups = generateFollowups(query, searchResults, activeChatMode);
+      if (followups.length > 0) {
+        html += '<div class="followup-section">';
+        html += '<div class="followup-label">Related questions</div>';
+        html += '<div class="followup-suggestions">';
+        followups.forEach(function(f) {
+          var escaped = f.replace(/'/g, "\\'");
+          html += '<button class="followup-btn" onclick="askFollowup(\'' + escaped + '\')">' + escHtml(f) + '</button>';
         });
         html += '</div></div>';
       }
@@ -3209,6 +4073,7 @@ function setMode(mode) {
 
     // Update welcome content based on mode
     updateWelcomeForMode(mode);
+    updateModeBanner(mode);
 
     var chatInput = document.getElementById('chatInput');
     chatInput.placeholder = mode === 'leads'
@@ -3232,6 +4097,101 @@ function setMode(mode) {
     const toolbar = document.getElementById('scenarioToolbar');
     if (toolbar) toolbar.classList.remove('visible');
     renderResults();
+  }
+}
+
+function updateModeBanner(mode) {
+  var banner = document.getElementById('modeBannerText');
+  if (!banner) return;
+  if (mode === 'leads') {
+    banner.textContent = 'Lead Conversion Mode - Craft persuasive responses to convert prospects';
+  } else {
+    banner.textContent = 'Ask Mode - Get guidance from 550+ workflows & 1,156+ macros';
+  }
+}
+
+// Follow-up suggestions
+function generateFollowups(query, searchResults, mode) {
+  var suggestions = [];
+  var queryLower = query.toLowerCase();
+
+  // Common follow-up patterns based on query keywords
+  var patterns = {
+    cancel: ['How do I process a refund?', 'What if they want to pause instead?', 'How do I handle a retention offer?'],
+    refund: ['What is the refund policy?', 'How long does a refund take?', 'Can I offer a partial refund?'],
+    shipping: ['How do I track a shipment?', 'What if the package is lost?', 'Can I expedite shipping?'],
+    billing: ['How do I update payment info?', 'What if the card was declined?', 'How do I apply a discount?'],
+    lab: ['How do I interpret lab results?', 'What if labs are abnormal?', 'When should labs be redrawn?'],
+    medication: ['How do I process a refill?', 'What are the dosing guidelines?', 'How do I handle a side effect?'],
+    escalate: ['Who do I escalate to?', 'What qualifies for escalation?', 'How do I document an escalation?']
+  };
+
+  // Find matching patterns
+  Object.keys(patterns).forEach(function(key) {
+    if (queryLower.includes(key)) {
+      suggestions = suggestions.concat(patterns[key]);
+    }
+  });
+
+  // Add suggestions from top matched workflow categories
+  if (searchResults.workflows.length > 0) {
+    var topWorkflow = searchResults.workflows[0];
+    var cat = (topWorkflow.category || '').toLowerCase();
+    if (cat.includes('trt')) {
+      suggestions.push('What are TRT dosing protocols?');
+    } else if (cat.includes('hrt')) {
+      suggestions.push('How do I explain HRT benefits?');
+    } else if (cat.includes('glp') || cat.includes('weight')) {
+      suggestions.push('What are GLP-1 titration schedules?');
+    }
+  }
+
+  // Mode-specific suggestions
+  if (mode === 'leads') {
+    suggestions.push('How do I handle pricing objections?');
+    suggestions.push('What makes Fountain different?');
+  }
+
+  // Dedupe and limit
+  suggestions = [...new Set(suggestions)].slice(0, 3);
+  return suggestions;
+}
+
+function askFollowup(question) {
+  var input = document.getElementById('chatInput');
+  if (input) {
+    input.value = question;
+    sendChatMessage();
+  }
+}
+
+// Feedback handling
+var feedbackStore = JSON.parse(localStorage.getItem('fv_feedback') || '{}');
+
+function submitFeedback(id, type, btn) {
+  // Store feedback
+  feedbackStore[id] = type;
+  localStorage.setItem('fv_feedback', JSON.stringify(feedbackStore));
+
+  // Update UI
+  var parent = btn.parentElement;
+  var upBtn = parent.querySelector('.thumbs-up');
+  var downBtn = parent.querySelector('.thumbs-down');
+
+  upBtn.classList.remove('active');
+  downBtn.classList.remove('active');
+
+  if (type === 'up') {
+    upBtn.classList.add('active');
+  } else {
+    downBtn.classList.add('active');
+  }
+
+  // Replace feedback label with thank you
+  var label = parent.querySelector('.feedback-label');
+  if (label) {
+    label.textContent = 'Thanks for your feedback!';
+    label.style.color = 'var(--accent)';
   }
 }
 
@@ -3329,6 +4289,28 @@ function toggleFavorite(name) {
   else { favs.unshift(name); }
   setFavorites(favs);
   renderFavSidebar();
+  renderResults();
+}
+
+// Pinned macros
+function getPinned() {
+  try { return JSON.parse(localStorage.getItem('fv_pinned') || '[]'); } catch { return []; }
+}
+function setPinned(arr) {
+  localStorage.setItem('fv_pinned', JSON.stringify(arr));
+}
+function isPinned(name) {
+  return getPinned().includes(name);
+}
+function togglePin(name, event) {
+  if (event) event.stopPropagation();
+  let pinned = getPinned();
+  if (pinned.includes(name)) {
+    pinned = pinned.filter(p => p !== name);
+  } else {
+    pinned.unshift(name);
+  }
+  setPinned(pinned);
   renderResults();
 }
 
@@ -3485,6 +4467,7 @@ function hidePreview() {
 
 /* ── Render ── */
 function renderResults() {
+  resetExpandAllState();
   const container = document.getElementById('results');
   const sort = document.getElementById('sortSelect').value;
 
@@ -3499,6 +4482,7 @@ function renderResults() {
     );
   });
 
+  // Sort by selected criteria
   if (sort === 'favorites') {
     const favs = getFavorites();
     filtered.sort((a, b) => {
@@ -3511,6 +4495,16 @@ function renderResults() {
     filtered.sort((a, b) => scoreMatch(b, searchQuery) - scoreMatch(a, searchQuery));
   } else {
     filtered.sort((a, b) => a.n.localeCompare(b.n));
+  }
+
+  // Always put pinned items first (after sorting)
+  const pinned = getPinned();
+  if (pinned.length > 0) {
+    filtered.sort((a, b) => {
+      const aPinned = pinned.includes(a.n) ? 0 : 1;
+      const bPinned = pinned.includes(b.n) ? 0 : 1;
+      return aPinned - bPinned;
+    });
   }
 
   document.getElementById('resultsCount').textContent = filtered.length + ' result' + (filtered.length !== 1 ? 's' : '');
@@ -3530,21 +4524,29 @@ function renderResults() {
     const favIcon = isFavorite(m.n) ? '&#9733;' : '&#9734;';
     const macroId = 'mc_' + btoa(encodeURIComponent(m.n)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
 
-    html += '<div class="macro-card" id="' + macroId + '" data-name="' + escHtml(m.n) + '" onmouseenter="showPreview(event, ' + JSON.stringify((m.c || '').substring(0, 500)) + ')" onmouseleave="hidePreview()">';
+    const isPinnedMacro = isPinned(m.n);
+    const pinnedClass = isPinnedMacro ? ' pinned' : '';
+    const pinBtnClass = isPinnedMacro ? ' is-pinned' : '';
+    const pinIcon = isPinnedMacro ? '&#x1F4CC;' : '&#x1F4CD;';
+    html += '<div class="macro-card' + pinnedClass + '" id="' + macroId + '" data-name="' + escHtml(m.n) + '" onmouseenter="showPreview(event, ' + JSON.stringify((m.c || '').substring(0, 500)) + ')" onmouseleave="hidePreview()">';
     html += '<button class="quick-copy-btn" onclick="event.stopPropagation(); quickCopyMacro(' + JSON.stringify(m.c || '') + ', this)" title="Quick copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
     html += '<div class="macro-header" onclick="openCard(this.parentElement, \'' + escHtml(m.n).replace(/'/g, "\\'") + '\')">';
     html += '<div class="macro-expand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
     html += '<div class="macro-info">';
-    html += '<div class="macro-name">' + highlightText(m.n, searchQuery) + '</div>';
+    html += '<div class="macro-name">' + highlightText(m.n, searchQuery) + (isPinnedMacro ? '<span class="pinned-indicator">Pinned</span>' : '') + '</div>';
     html += '<div class="macro-meta">';
     html += '<span class="macro-category-tag" data-cat="' + escHtml(m.cat) + '">' + escHtml(m.cat) + '</span>';
     html += '</div></div>';
+    html += '<button class="pin-btn' + pinBtnClass + '" title="' + (isPinnedMacro ? 'Unpin' : 'Pin to top') + '" onclick="togglePin(\'' + escHtml(m.n).replace(/'/g, "\\'") + '\', event)">' + pinIcon + '</button>';
     html += '<button class="fav-btn' + favClass + '" title="' + (isFavorite(m.n) ? 'Remove from favorites' : 'Add to favorites') + '" onclick="event.stopPropagation(); toggleFavorite(\'' + escHtml(m.n).replace(/'/g, "\\'") + '\')">' + favIcon + '</button>';
     html += '</div>';
     html += '<div class="macro-body">';
     html += '<div class="macro-content">' + highlightText(m.c || '(No content)', searchQuery) + '</div>';
     html += '<div class="macro-actions-bar">';
     html += '<button class="copy-btn" onclick="event.stopPropagation(); copyMacro(this, ' + JSON.stringify(m.c) + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy content</button>';
+    if (hasVariables(m.c || '')) {
+      html += '<button class="fill-copy-btn" onclick="event.stopPropagation(); openVarfillModal(' + JSON.stringify(m.c) + ')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Fill & Copy</button>';
+    }
     if (hasActions) html += '<span class="macro-actions-info">Actions: ' + escHtml(m.a) + '</span>';
     html += '</div></div></div>';
   }
@@ -3591,25 +4593,33 @@ function quickSearchScenario(scenario) {
 function renderMacroCard(m) {
   const favClass = isFavorite(m.n) ? ' is-fav' : '';
   const favIcon = isFavorite(m.n) ? '&#9733;' : '&#9734;';
+  const isPinnedMacro = isPinned(m.n);
+  const pinnedClass = isPinnedMacro ? ' pinned' : '';
+  const pinBtnClass = isPinnedMacro ? ' is-pinned' : '';
+  const pinIcon = isPinnedMacro ? '&#x1F4CC;' : '&#x1F4CD;';
   const macroId = 'mc_' + btoa(encodeURIComponent(m.n)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
   const macroName = escHtml(m.n);
   const macroContent = escHtml(m.c || '(No content)');
   const actionInfo = m.a && m.a.trim() ? '<span class="macro-actions-info">Actions: ' + escHtml(m.a) + '</span>' : '';
-  
-  let html = '<div class="macro-card" id="' + macroId + '" data-name="' + macroName + '">';
+
+  let html = '<div class="macro-card' + pinnedClass + '" id="' + macroId + '" data-name="' + macroName + '">';
   html += '<div class="macro-header" onclick="openCard(this.parentElement, ' + JSON.stringify(m.n) + ')">';
   html += '<div class="macro-expand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
   html += '<div class="macro-info">';
-  html += '<div class="macro-name">' + macroName + '</div>';
+  html += '<div class="macro-name">' + macroName + (isPinnedMacro ? '<span class="pinned-indicator">Pinned</span>' : '') + '</div>';
   html += '<div class="macro-meta">';
   html += '<span class="macro-category-tag" data-cat="' + escHtml(m.cat) + '">' + escHtml(m.cat) + '</span>';
   html += '</div></div>';
+  html += '<button class="pin-btn' + pinBtnClass + '" title="' + (isPinnedMacro ? 'Unpin' : 'Pin to top') + '" onclick="togglePin(' + JSON.stringify(m.n) + ', event)">' + pinIcon + '</button>';
   html += '<button class="fav-btn' + favClass + '" title="' + (isFavorite(m.n) ? 'Remove from favorites' : 'Add to favorites') + '" onclick="event.stopPropagation(); toggleFavorite(' + JSON.stringify(m.n) + ')">' + favIcon + '</button>';
   html += '</div>';
   html += '<div class="macro-body">';
   html += '<div class="macro-content">' + macroContent + '</div>';
   html += '<div class="macro-actions-bar">';
   html += '<button class="copy-btn" onclick="event.stopPropagation(); copyMacro(this, ' + JSON.stringify(m.c) + ')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy content</button>';
+  if (hasVariables(m.c || '')) {
+    html += '<button class="fill-copy-btn" onclick="event.stopPropagation(); openVarfillModal(' + JSON.stringify(m.c) + ')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Fill & Copy</button>';
+  }
   html += actionInfo;
   html += '</div></div></div>';
   
