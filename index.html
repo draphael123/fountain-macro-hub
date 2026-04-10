@@ -2521,6 +2521,31 @@
     box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
   }
 
+  /* Leads Reference Section */
+  .leads-reference-section { margin-top: 32px; width: 100%; max-width: 600px; }
+  .leads-tab-bar { display: flex; gap: 4px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; overflow-x: auto; }
+  .leads-tab-btn { padding: 10px 14px; border: none; background: none; cursor: pointer; font-size: 13px; font-weight: 500; color: #64748b; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; white-space: nowrap; }
+  .leads-tab-btn:hover { color: #059669; }
+  .leads-tab-btn.active { color: #059669; border-bottom-color: #059669; }
+  .leads-tab-content { background: #f8faf9; border: 1px solid #d1fae5; border-radius: 12px; padding: 20px; min-height: 180px; max-height: 320px; overflow-y: auto; }
+  .leads-ref-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .leads-ref-card:last-child { margin-bottom: 0; }
+  .leads-ref-card h4 { font-size: 14px; font-weight: 600; color: #059669; margin: 0 0 8px 0; }
+  .leads-ref-card p { font-size: 13px; color: #475569; margin: 0; line-height: 1.5; }
+  .leads-ref-card .copy-btn { font-size: 11px; padding: 4px 10px; background: #059669; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+  .leads-ref-card .copy-btn:hover { background: #047857; }
+  .leads-ref-card a { color: #059669; text-decoration: none; font-weight: 500; }
+  .leads-ref-card a:hover { text-decoration: underline; }
+  .leads-ref-list { list-style: none; padding: 0; margin: 0; }
+  .leads-ref-list li { padding: 8px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; color: #334155; }
+  .leads-ref-list li:last-child { border-bottom: none; }
+  .leads-ref-steps { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+  .leads-ref-steps li { position: relative; padding: 12px 0 12px 44px; border-bottom: 1px solid #e2e8f0; font-size: 13px; color: #334155; }
+  .leads-ref-steps li:last-child { border-bottom: none; }
+  .leads-ref-steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 8px; width: 28px; height: 28px; background: #059669; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; }
+  .leads-ref-note { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #92400e; margin-top: 12px; }
+  .leads-ref-disclaimer { background: #f1f5f9; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #64748b; margin-top: 12px; font-style: italic; }
+
   /* Ask mode - purple theme (already default, just making explicit) */
   body.chat-mode .chat-ai-avatar {
     background: linear-gradient(135deg, #7c3aed, #a78bfa);
@@ -10972,10 +10997,6 @@ function updateWelcomeForMode(mode) {
           '<span class="suggestion-emoji">&#x1F4B5;</span>' +
           '<span>Lead asking about TRT pricing</span>' +
         '</button>' +
-        '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead interested in GLP-1 weight loss but worried about side effects\')">' +
-          '<span class="suggestion-emoji">&#x1F48A;</span>' +
-          '<span>GLP-1 lead worried about side effects</span>' +
-        '</button>' +
         '<button class="chat-suggestion-btn" onclick="chatAsk(\'Lead comparing us to a local clinic, wants to know why telehealth is better\')">' +
           '<span class="suggestion-emoji">&#x1F3E5;</span>' +
           '<span>Lead comparing us to local clinic</span>' +
@@ -10992,7 +11013,18 @@ function updateWelcomeForMode(mode) {
           '<span class="suggestion-emoji">&#x1F9EA;</span>' +
           '<span>Lead asking about lab requirements</span>' +
         '</button>' +
+      '</div>' +
+      '<div class="leads-reference-section">' +
+        '<div class="leads-tab-bar">' +
+          '<button class="leads-tab-btn active" data-tab="pricing" onclick="switchLeadsTab(\'pricing\')">Pricing</button>' +
+          '<button class="leads-tab-btn" data-tab="states" onclick="switchLeadsTab(\'states\')">States</button>' +
+          '<button class="leads-tab-btn" data-tab="started" onclick="switchLeadsTab(\'started\')">Getting Started</button>' +
+          '<button class="leads-tab-btn" data-tab="objections" onclick="switchLeadsTab(\'objections\')">Objections</button>' +
+          '<button class="leads-tab-btn" data-tab="qualification" onclick="switchLeadsTab(\'qualification\')">Qualification</button>' +
+        '</div>' +
+        '<div class="leads-tab-content" id="leadsTabContent"></div>' +
       '</div>';
+    renderLeadsTabContent('pricing');
   } else {
     welcome.innerHTML =
       '<div class="chat-welcome-icon">' +
@@ -11743,6 +11775,118 @@ function scrollToMacro(name) {
       }
     }
   }, 50);
+}
+
+
+// Leads Reference Data
+var LEADS_REFERENCE_DATA = {
+  pricing: {
+    title: 'Pricing Information',
+    content: [
+      { label: 'TRT Program', text: 'All-inclusive membership covering medication, supplies, provider visits, labs (except NY/NJ/MD), shipping, and 24/7 support.', link: 'https://fountain.net/trt#pricing' },
+      { label: 'HRT Program', text: 'All-inclusive membership covering medication, supplies, provider visits, labs (except NY/NJ/MD), shipping, and 24/7 support.', link: 'https://fountain.net/hrt#pricing' }
+    ]
+  },
+  states: {
+    title: 'Service Availability',
+    text: 'Fountain operates in most US states. A few states have specific restrictions for certain services. The assessment will confirm eligibility based on location.',
+    note: 'Labs are covered in most states. NY, NJ, and MD require patients to use insurance for in-person lab visits.'
+  },
+  started: {
+    title: 'Getting Started',
+    steps: [
+      'Complete online assessment (5-10 minutes)',
+      'Schedule lab work at Quest, Labcorp, or at-home via Getlabs',
+      'Video consultation with a licensed provider',
+      'Prescription shipped directly to your door'
+    ]
+  },
+  objections: {
+    title: 'Common Objections',
+    templates: [
+      { objection: 'Too expensive', response: 'Our plans are all-inclusive with no hidden fees. This covers your medication, supplies, provider visits, labs, shipping, and 24/7 support. Many find it more affordable than local clinics when factoring in all costs.' },
+      { objection: 'Need to think about it', response: 'Absolutely, take your time. The assessment is free and takes just 5-10 minutes with no commitment. It helps our team understand your needs: fountain.net' },
+      { objection: 'Using local clinic', response: "That's great you're exploring options. Many patients choose us for the convenience of telehealth visits from home, no waiting rooms, and medication shipped to their door." },
+      { objection: 'Do you take insurance?', response: "We don't bill insurance directly, but our plans are FSA/HSA eligible. Our transparent pricing means no surprise bills. Many patients find our all-inclusive approach more predictable than insurance co-pays." },
+      { objection: 'Is this legitimate?', response: "Great question. Fountain works with board-certified providers and licensed US pharmacies. We've helped thousands of patients. You can check reviews on Trustpilot or visit our website for more info." }
+    ]
+  },
+  qualification: {
+    title: 'Basic Eligibility',
+    items: [
+      'Age 18 or older',
+      'US resident in a serviced state',
+      'Willing to complete required lab work',
+      'No active contraindications (determined by provider)'
+    ],
+    disclaimer: 'Medical eligibility is determined by a licensed provider after reviewing labs and health history. The assessment helps identify if our program may be right for you.'
+  }
+};
+
+function switchLeadsTab(tabId) {
+  document.querySelectorAll('.leads-tab-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.tab === tabId);
+  });
+  renderLeadsTabContent(tabId);
+}
+
+function renderLeadsTabContent(tabId) {
+  var container = document.getElementById('leadsTabContent');
+  if (!container) return;
+  var data = LEADS_REFERENCE_DATA[tabId];
+  if (!data) return;
+  var html = '';
+
+  if (tabId === 'pricing') {
+    data.content.forEach(function(item) {
+      html += '<div class="leads-ref-card">' +
+        '<h4>' + item.label + '</h4>' +
+        '<p>' + item.text + '</p>' +
+        '<p style="margin-top:8px;"><a href="' + item.link + '" target="_blank">View pricing details &#8594;</a></p>' +
+      '</div>';
+    });
+  } else if (tabId === 'states') {
+    html = '<div class="leads-ref-card">' +
+      '<h4>' + data.title + '</h4>' +
+      '<p>' + data.text + '</p>' +
+      '<div class="leads-ref-note">' + data.note + '</div>' +
+    '</div>';
+  } else if (tabId === 'started') {
+    html = '<div class="leads-ref-card"><h4>' + data.title + '</h4><ol class="leads-ref-steps">';
+    data.steps.forEach(function(step) {
+      html += '<li>' + step + '</li>';
+    });
+    html += '</ol></div>';
+  } else if (tabId === 'objections') {
+    data.templates.forEach(function(item) {
+      html += '<div class="leads-ref-card">' +
+        '<h4>"' + item.objection + '"</h4>' +
+        '<p>' + item.response + '</p>' +
+        '<button class="copy-btn" onclick="copyLeadsResponse(this)">Copy response</button>' +
+      '</div>';
+    });
+  } else if (tabId === 'qualification') {
+    html = '<div class="leads-ref-card"><h4>' + data.title + '</h4><ul class="leads-ref-list">';
+    data.items.forEach(function(item) {
+      html += '<li>' + item + '</li>';
+    });
+    html += '</ul><div class="leads-ref-disclaimer">' + data.disclaimer + '</div></div>';
+  }
+
+  container.innerHTML = html;
+}
+
+function copyLeadsResponse(btn) {
+  var text = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.style.background = '#047857';
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.style.background = '#059669';
+    }, 1500);
+  });
 }
 
 /* ── Init sidebars and render ── */
